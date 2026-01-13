@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Mvvm" Version="26.1.1-alpha-26013" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DXTrello.Core\DXTrello.Core.csproj" />
+  </ItemGroup>
+
+</Project>

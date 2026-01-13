@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="DXTrello.Core/DXTrello.Core.csproj" />
+  <Project Path="DXTrello.ViewModel/DXTrello.ViewModel.csproj" />
+  <Project Path="DXTrello.WinForms/DXTrello.WinForms.csproj" />
+</Solution>

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Win.Design" Version="26.1.1-alpha-26013" />
+    <PackageReference Include="DevExpress.Mvvm" Version="26.1.1-alpha-26013" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DXTrello.ViewModel\DXTrello.ViewModel.csproj" />
+    <ProjectReference Include="..\DXTrello.Core\DXTrello.Core.csproj" />
+  </ItemGroup>
+
+</Project>
