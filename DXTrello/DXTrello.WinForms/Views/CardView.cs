@@ -2,9 +2,15 @@
 using DevExpress.XtraGrid.Views.Tile;
 using DevExpress.XtraGrid.Columns;
 using DXTrello.Core.Models;
+using DevExpress.Utils;
+using DevExpress.Utils.Html;
+using DevExpress.Utils.Html.ViewInfo;
+using DXTrello.Core.Enums;
+using DXTrello.ViewModel.Services;
+using DevExpress.Utils.MVVM.Services;
 
 namespace DXTrello.WinForms {
-    public partial class CardView : DevExpress.XtraEditors.XtraUserControl {
+    public partial class CardView : DevExpress.XtraEditors.XtraUserControl, ICardViewService {
         TileView tileView;
 
         public CardView() {
@@ -24,27 +30,44 @@ namespace DXTrello.WinForms {
             var colId = AddColumn(nameof(ProjectTask.Id));
             var colStatus = AddColumn(nameof(ProjectTask.Status));
             var colTitle = AddColumn(nameof(ProjectTask.Title));
-            var colDesc = AddColumn(nameof(ProjectTask.Description));
-            var colDate = AddColumn(nameof(ProjectTask.EndDate));
+            var colTrimDesc = AddColumn(nameof(ProjectTask.TrimmedDescription));
+            var colEndDate = AddColumn(nameof(ProjectTask.EndDate));
+            var colStartDate = AddColumn(nameof(ProjectTask.StartDate));
             var colAssignee = AddColumn(nameof(ProjectTask.AssigneeName));
-            
+            var colDesc = AddColumn(nameof(ProjectTask.Description));
+
             // Configure Kanban Mode
             tileView.OptionsTiles.LayoutMode = TileViewLayoutMode.Kanban;
-            tileView.OptionsTiles.VerticalContentAlignment = DevExpress.Utils.VertAlignment.Top;
+            tileView.OptionsTiles.VerticalContentAlignment = VertAlignment.Top;
             tileView.ColumnSet.GroupColumn = colStatus;
-            
+            tileView.OptionsBehavior.EditingMode = TileViewEditingMode.EditForm;
+            tileView.OptionsKanban.GroupFooterButton.Text = "Add new card";
+            tileView.OptionsKanban.GroupFooterButton.Visible = DefaultBoolean.True;
+            tileView.OptionsKanban.ShowGroupBackground = DefaultBoolean.True;
+            tileView.Appearance.Group.BackColor = SystemColors.ControlLightLight;
+            tileView.Appearance.Group.Options.UseBackColor = true;
+
+            // Configuring context button
+            SimpleContextButton addButton = new SimpleContextButton();
+            addButton.AlignmentOptions.Panel = ContextItemPanel.Center;
+            addButton.AlignmentOptions.Position = ContextItemPosition.Far;
+            addButton.ImageOptionsCollection.ItemNormal.SvgImage = DevExpress.Utils.Svg.SvgImage.FromFile("Resources/Add.svg");
+            addButton.ImageOptionsCollection.ItemNormal.SvgImageSize = new Size(16, 16);
+            tileView.OptionsKanban.GroupHeaderContextButtons.Add(addButton);
+
             // Allow Drag & Drop to change Status
             tileView.OptionsDragDrop.AllowDrag = true;
-            
+
             // Configure HTML Template
-            tileView.OptionsTiles.ItemSize = new Size(240, 120);
-            
+            //tileView.OptionsTiles.ItemSize = new Size(240, 120);
+            tileView.OptionsHtmlTemplate.ItemAutoHeight = true;
+
             // Check if TileHtmlTemplate property exists or similar. 
             // Assuming TileHtmlTemplate property for the current version logic.
             tileView.TileHtmlTemplate.Template = @"
                 <div class='card'>
                     <div class='title'>${Title}</div>
-                    <div class='desc'>${Description}</div>
+                    <div class='desc'>${TrimmedDescription}</div>
                     <div class='footer'>
                         <div class='date-badge'>${EndDate}</div>
                         <div class='user'>${AssigneeName}</div>
@@ -59,8 +82,6 @@ namespace DXTrello.WinForms {
                     background-color: @ControlLightLight;
                     border: 1px solid @ControlLight;
                     border-radius: 4px;
-                    height: 100%;
-                    box-shadow: 0px 1px 2px @ControlDark;
                 }
                 .title {
                     font-size: 8px;
@@ -69,10 +90,9 @@ namespace DXTrello.WinForms {
                 }
                 .desc {
                     font-size: 8px;
-                    color: @DisabledText;
                     flex-grow: 1;
+                    color: @DisabledText;
                     overflow: hidden;
-                    text-overflow: ellipsis;
                 }
                 .footer {
                     display: flex;
@@ -117,6 +137,24 @@ namespace DXTrello.WinForms {
                 if (rowHandle != DevExpress.XtraGrid.GridControl.InvalidRowHandle && rowHandle != tileView.FocusedRowHandle)
                     tileView.FocusedRowHandle = rowHandle;
             });
+
+            // Handle buttons
+            fluent.WithEvent<GroupFooterButtonClickEventArgs>(tileView, "GroupFooterButtonClick")
+                .EventToCommand(
+                    x => x.AppendCreateNewTask,
+                    args => (ProjectTaskStatus)args.GroupValue
+                );
+            fluent.WithEvent<GroupHeaderContextButtonClickEventArgs>(tileView, "GroupHeaderContextButtonClick")
+                .EventToCommand(
+                    x => x.PrependCreateNewTask,
+                    args => (ProjectTaskStatus)args.GroupValue
+                );
+
+            mvvmContext.RegisterService(this);
+        }
+
+        void ICardViewService.ShowEditForm() {
+            tileView.ShowEditForm();
         }
     }
 }

@@ -18,4 +18,10 @@
     <ProjectReference Include="..\DXTrello.Core\DXTrello.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\Add.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

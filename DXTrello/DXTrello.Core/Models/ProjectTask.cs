@@ -16,6 +16,15 @@ namespace DXTrello.Core.Models {
             return true;
         }
 
+        string GetWordTrimmedString(string source, int maxLength) {
+            if (source.Length <= maxLength)
+                return source;
+            int finalIndex = source.LastIndexOf(' ', maxLength);
+            if(finalIndex <= 0)
+                finalIndex = maxLength;
+            return source.Substring(0, finalIndex) + "...";
+        }
+
         private long id;
         public long Id { get => id; set => SetField(ref id, value); }
 
@@ -27,6 +36,7 @@ namespace DXTrello.Core.Models {
 
         private string description = string.Empty;
         public string Description { get => description; set => SetField(ref description, value); }
+        public string TrimmedDescription { get => GetWordTrimmedString(Description, 100); }
 
         private DateTime startDate;
         public DateTime StartDate { get => startDate; set => SetField(ref startDate, value); }
