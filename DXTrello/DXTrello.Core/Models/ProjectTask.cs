@@ -1,28 +1,70 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using DXTrello.Core.Enums;
 
 namespace DXTrello.Core.Models {
-    public class ProjectTask {
-        // Unique ID from GitHub
-        public long Id { get; set; }
+    public class ProjectTask : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler? PropertyChanged;
+        void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        // For Gantt Hierarchy (mapped from GitHub Task Lists or Labels)
-        public long? ParentId { get; set; }
+        bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null) {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
 
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        private long id;
+        public long Id { get => id; set => SetField(ref id, value); }
 
-        // Percent complete (0-1). Used by the Gantt view.
-        public double Progress { get; set; }
+        private long? parentId;
+        public long? ParentId { get => parentId; set => SetField(ref parentId, value); }
 
-        // For Kanban Columns
-        public ProjectTaskStatus Status { get; set; }
+        private string title = string.Empty;
+        public string Title { get => title; set => SetField(ref title, value); }
 
-        // For Resource Mapping
-        public TeamMember? Assignee { get; set; }
+        private string description = string.Empty;
+        public string Description { get => description; set => SetField(ref description, value); }
+
+        private DateTime startDate;
+        public DateTime StartDate { get => startDate; set => SetField(ref startDate, value); }
+
+        private DateTime endDate;
+        public DateTime EndDate { get => endDate; set => SetField(ref endDate, value); }
+
+        private double progress;
+        public double Progress { 
+            get => progress; 
+            set {
+                if (SetField(ref progress, value))
+                    OnPropertyChanged(nameof(ProgressPercent));
+            }
+        }
+
+        public int ProgressPercent {
+            get => (int)(Progress * 100);
+            set => Progress = value / 100.0;
+        }
+
+        private ProjectTaskStatus status;
+        public ProjectTaskStatus Status { 
+            get => status; 
+            set {
+                if (SetField(ref status, value))
+                    OnPropertyChanged(nameof(StatusDisplay));
+            }
+        }
+
+        private TeamMember? assignee;
+        public TeamMember? Assignee { 
+            get => assignee; 
+            set {
+                if (SetField(ref assignee, value))
+                    OnPropertyChanged(nameof(AssigneeName));
+            }
+        }
 
         // Dependency tracking (GitHub issue links)
         public IList<long> DependencyIds { get; set; } = new List<long>();

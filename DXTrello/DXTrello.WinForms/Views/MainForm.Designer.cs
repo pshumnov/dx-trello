@@ -46,7 +46,8 @@
             accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement1 });
             accordionControl1.Location = new Point(0, 0);
             accordionControl1.Name = "accordionControl1";
-            accordionControl1.Size = new Size(249, 725);
+            accordionControl1.OptionsMinimizing.State = DevExpress.XtraBars.Navigation.AccordionControlState.Minimized;
+            accordionControl1.Size = new Size(48, 725);
             accordionControl1.TabIndex = 0;
             // 
             // accordionControlElement1

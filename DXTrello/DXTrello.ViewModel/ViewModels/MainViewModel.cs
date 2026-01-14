@@ -28,7 +28,6 @@ namespace DXTrello.ViewModel.ViewModels {
 
         public string Title { get; }
         public virtual BindingList<ProjectTask> Tasks { get; protected set; }
-        public virtual ProjectTask? SelectedTask { get; set; }
         public virtual int SelectedViewIndex { get; set; }
 
         public async Task OnViewLoad() {
@@ -40,7 +39,6 @@ namespace DXTrello.ViewModel.ViewModels {
             Tasks.Clear();
             foreach(var item in data)
                 Tasks.Add(item);
-            SelectedTask = Tasks.FirstOrDefault();
         }
         public void InitDocuments() {
             var dms = this.GetService<IDocumentManagerService>();
