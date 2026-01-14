@@ -52,7 +52,6 @@
             // 
             // layoutControl1
             // 
-            SetBoundPropertyName(layoutControl1, "");
             layoutControl1.Controls.Add(textEdit1);
             layoutControl1.Controls.Add(textEdit2);
             layoutControl1.Controls.Add(dateEdit1);
@@ -68,7 +67,6 @@
             // 
             // textEdit1
             // 
-            SetBoundPropertyName(textEdit1, "");
             textEdit1.Location = new Point(14, 34);
             textEdit1.Name = "textEdit1";
             textEdit1.Size = new Size(643, 22);
@@ -77,7 +75,6 @@
             // 
             // textEdit2
             // 
-            SetBoundPropertyName(textEdit2, "");
             textEdit2.Location = new Point(14, 80);
             textEdit2.Name = "textEdit2";
             textEdit2.Size = new Size(643, 413);
@@ -86,7 +83,6 @@
             // 
             // dateEdit1
             // 
-            SetBoundPropertyName(dateEdit1, "");
             dateEdit1.EditValue = null;
             dateEdit1.Location = new Point(92, 523);
             dateEdit1.Name = "dateEdit1";
@@ -98,7 +94,6 @@
             // 
             // dateEdit2
             // 
-            SetBoundPropertyName(dateEdit2, "");
             dateEdit2.EditValue = null;
             dateEdit2.Location = new Point(92, 497);
             dateEdit2.Name = "dateEdit2";
