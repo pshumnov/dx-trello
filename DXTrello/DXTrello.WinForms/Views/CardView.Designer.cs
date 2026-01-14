@@ -44,10 +44,11 @@
             // 
             // gridView1
             // 
+            gridView1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
             // 
-            // mvvmContext1
+            // mvvmContext
             // 
             mvvmContext.ContainerControl = this;
             // 

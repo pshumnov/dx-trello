@@ -25,16 +25,14 @@
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
-            navigationPane1 = new DevExpress.XtraBars.Navigation.NavigationPane();
-            navigationPage1 = new DevExpress.XtraBars.Navigation.NavigationPage();
-            cardView = new CardView();
-            navigationPage2 = new DevExpress.XtraBars.Navigation.NavigationPage();
-            ganttView = new GanttView();
+            accordionControl1 = new DevExpress.XtraBars.Navigation.AccordionControl();
+            accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
+            tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)navigationPane1).BeginInit();
-            navigationPane1.SuspendLayout();
-            navigationPage1.SuspendLayout();
-            navigationPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)accordionControl1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)tabbedView1).BeginInit();
             SuspendLayout();
             // 
             // mvvmContext
@@ -42,73 +40,51 @@
             mvvmContext.ContainerControl = this;
             mvvmContext.ViewModelType = typeof(ViewModel.ViewModels.MainViewModel);
             // 
-            // navigationPane1
+            // accordionControl1
             // 
-            navigationPane1.Controls.Add(navigationPage1);
-            navigationPane1.Controls.Add(navigationPage2);
-            navigationPane1.Dock = DockStyle.Fill;
-            navigationPane1.Location = new Point(0, 0);
-            navigationPane1.Name = "navigationPane1";
-            navigationPane1.Pages.AddRange(new DevExpress.XtraBars.Navigation.NavigationPageBase[] { navigationPage1, navigationPage2 });
-            navigationPane1.RegularSize = new Size(1076, 662);
-            navigationPane1.SelectedPage = navigationPage2;
-            navigationPane1.Size = new Size(1076, 662);
-            navigationPane1.TabIndex = 0;
-            navigationPane1.Text = "navigationPane1";
+            accordionControl1.Dock = DockStyle.Left;
+            accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement1 });
+            accordionControl1.Location = new Point(0, 0);
+            accordionControl1.Name = "accordionControl1";
+            accordionControl1.Size = new Size(249, 725);
+            accordionControl1.TabIndex = 0;
             // 
-            // navigationPage1
+            // accordionControlElement1
             // 
-            navigationPage1.Caption = "Card View";
-            navigationPage1.Controls.Add(cardView);
-            navigationPage1.Name = "navigationPage1";
-            navigationPage1.Size = new Size(895, 553);
+            accordionControlElement1.Name = "accordionControlElement1";
+            accordionControlElement1.Text = "Element1";
             // 
-            // cardView1
+            // documentManager1
             // 
-            cardView.Dock = DockStyle.Fill;
-            cardView.Location = new Point(0, 0);
-            cardView.Name = "cardView1";
-            cardView.Size = new Size(895, 553);
-            cardView.TabIndex = 0;
+            documentManager1.ContainerControl = this;
+            documentManager1.View = tabbedView1;
+            documentManager1.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
             // 
-            // navigationPage2
+            // tabbedView1
             // 
-            navigationPage2.Caption = "Timeline View";
-            navigationPage2.Controls.Add(ganttView);
-            navigationPage2.Name = "navigationPage2";
-            navigationPage2.Size = new Size(895, 553);
-            // 
-            // ganttView1
-            // 
-            ganttView.Dock = DockStyle.Fill;
-            ganttView.Location = new Point(0, 0);
-            ganttView.Name = "ganttView1";
-            ganttView.Size = new Size(895, 553);
-            ganttView.TabIndex = 0;
+            tabbedView1.Style = DevExpress.XtraBars.Docking2010.Views.DockingViewStyle.Classic;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1076, 662);
-            Controls.Add(navigationPane1);
+            ClientSize = new Size(1304, 725);
+            Controls.Add(accordionControl1);
             Name = "MainForm";
             Text = "MainView";
             ((System.ComponentModel.ISupportInitialize)mvvmContext).EndInit();
-            ((System.ComponentModel.ISupportInitialize)navigationPane1).EndInit();
-            navigationPane1.ResumeLayout(false);
-            navigationPage1.ResumeLayout(false);
-            navigationPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)accordionControl1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)documentManager1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)tabbedView1).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private DevExpress.Utils.MVVM.MVVMContext mvvmContext;
-        private DevExpress.XtraBars.Navigation.NavigationPane navigationPane1;
-        private DevExpress.XtraBars.Navigation.NavigationPage navigationPage1;
-        private CardView cardView;
-        private DevExpress.XtraBars.Navigation.NavigationPage navigationPage2;
-        private GanttView ganttView;
+        private DevExpress.XtraBars.Navigation.AccordionControl accordionControl1;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement1;
+        private DevExpress.XtraBars.Docking2010.DocumentManager documentManager1;
+        private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tabbedView1;
     }
 }

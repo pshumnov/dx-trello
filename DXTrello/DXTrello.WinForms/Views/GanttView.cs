@@ -4,9 +4,6 @@ namespace DXTrello.WinForms {
     public partial class GanttView : DevExpress.XtraEditors.XtraUserControl {
         public GanttView() {
             InitializeComponent();
-        }
-        public void SetViewModel(GanttViewModel viewModel) {
-            mvvmContext.SetViewModel(typeof(GanttViewModel), viewModel);
             InitializeBindings();
         }
         void InitializeBindings() {

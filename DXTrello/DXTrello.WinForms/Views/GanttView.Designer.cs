@@ -32,13 +32,14 @@
             // 
             // ganttControl1
             // 
+            ganttControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             ganttControl1.Dock = DockStyle.Fill;
             ganttControl1.Location = new Point(0, 0);
             ganttControl1.Name = "ganttControl1";
             ganttControl1.Size = new Size(992, 704);
             ganttControl1.TabIndex = 0;
             // 
-            // mvvmContext1
+            // mvvmContext
             // 
             mvvmContext.ContainerControl = this;
             // 

@@ -3,6 +3,7 @@ using DXTrello.Core.Services;
 using DevExpress.Mvvm.DataAnnotations;
 using System.ComponentModel;
 using DevExpress.Mvvm.POCO;
+using DevExpress.Mvvm;
 
 namespace DXTrello.ViewModel.ViewModels {
     [POCOViewModel()]
@@ -32,6 +33,7 @@ namespace DXTrello.ViewModel.ViewModels {
 
         public async Task OnViewLoad() {
             await LoadProjectTasks();
+            InitDocuments();
         }
         public async Task LoadProjectTasks() {
             var data = await taskDataService.GetProjectTasksAsync().ConfigureAwait(false);
@@ -39,6 +41,15 @@ namespace DXTrello.ViewModel.ViewModels {
             foreach(var item in data)
                 Tasks.Add(item);
             SelectedTask = Tasks.FirstOrDefault();
+        }
+        public void InitDocuments() {
+            var dms = this.GetService<IDocumentManagerService>();
+            var cardDocument = dms.CreateDocument(CardViewModel);
+            cardDocument.Title = "Board";
+            cardDocument.Show();
+            var ganttDocument = dms.CreateDocument(GanttViewModel);
+            ganttDocument.Title = "Gantt";
+            ganttDocument.Show();
         }
     }
 }
