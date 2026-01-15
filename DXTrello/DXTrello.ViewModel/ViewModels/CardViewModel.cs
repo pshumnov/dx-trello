@@ -20,6 +20,7 @@ namespace DXTrello.ViewModel.ViewModels {
         public virtual BindingList<ProjectTask> Tasks { get; protected set; }
         public virtual ProjectTask? SelectedTask { get; set; }
         public virtual ICardViewService CardViewService => this.GetService<ICardViewService>();
+        public virtual IDialogService DialogService => this.GetService<IDialogService>();
 
         protected void OnSelectedTaskChanged() {
             Messenger.Default.Send(new SelectedTaskChangedMessage(SelectedTask));
@@ -40,10 +41,36 @@ namespace DXTrello.ViewModel.ViewModels {
                 Id = Tasks.Count + 1,
                 ParentId = -1
             };
-            int index = prepend ? 0 : Tasks.Count;
-            Tasks.Insert(index, newTask);
-            SelectedTask = newTask;
-            CardViewService?.ShowEditForm();
+            DetailsViewModel detailsViewModel = DetailsViewModel.Create(newTask);
+            var command = new DelegateCommand(() => {
+            }, () => !string.IsNullOrEmpty(newTask.Title) && newTask.StartDate != DateTime.MinValue);
+            PropertyChangedEventHandler propertyChangedFunc = (s, e) => {
+                command.RaiseCanExecuteChanged();
+            };
+            try {
+                newTask.PropertyChanged += propertyChangedFunc;
+                List<UICommand> buttons = new List<UICommand>() {
+                new UICommand {
+                    Id = "Create",
+                    Caption = "Create",
+                    Tag = MessageResult.Yes,
+                    Command = command
+                },
+                new UICommand {
+                    Id = "Cancel",
+                    Caption = "Cancel",
+                    Tag = MessageResult.Cancel
+                } };
+                var result = DialogService.ShowDialog(buttons, "Create task", detailsViewModel);
+                if(result.Tag is MessageResult.Yes) {
+                    int targetIdx = prepend ? 0 : Tasks.Count;
+                    Tasks.Insert(targetIdx, newTask);
+                    SelectedTask = newTask;
+                }
+            }
+            finally {
+                newTask.PropertyChanged -= propertyChangedFunc;
+            }
         }
     }
 }

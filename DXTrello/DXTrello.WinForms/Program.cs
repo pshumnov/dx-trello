@@ -1,4 +1,5 @@
 using DevExpress.LookAndFeel;
+using DevExpress.Utils.MVVM;
 
 namespace DXTrello.WinForms
 {
