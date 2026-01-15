@@ -35,6 +35,9 @@ namespace DXTrello.ViewModel.ViewModels {
         public void ToggleTaskTable() {
             TaskTableVisibility = !TaskTableVisibility;
         }
+        public void ClearSelection() {
+            SelectedTask = null;
+        }
         #endregion
 
         #region Change Handlers

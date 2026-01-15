@@ -7,6 +7,7 @@ using DevExpress.XtraBars;
 using DXTrello.ViewModel.Services;
 using DevExpress.XtraRichEdit.Layout.Engine;
 using DevExpress.XtraRichEdit.Commands.Internal;
+using DevExpress.LookAndFeel;
 
 namespace DXTrello.WinForms {
     public partial class GanttView : DevExpress.XtraEditors.XtraUserControl, IGanttViewService {
@@ -31,7 +32,6 @@ namespace DXTrello.WinForms {
 
             // Configure columns
             AddColumn(nameof(ProjectTask.Title), "Task Name", 250);
-            // AddColumn(nameof(ProjectTask.ProgressPercent), "Progress", 75);
 
             // Allow user interaction
             ganttControl.OptionsCustomization.AllowModifyTasks = DevExpress.Utils.DefaultBoolean.True;
@@ -40,6 +40,17 @@ namespace DXTrello.WinForms {
             ganttControl.ZoomMode = GanttZoomMode.Smooth;
             ganttControl.ChartStartDate = null;
             ganttControl.ChartFinishDate = null;
+
+            ganttControl.CustomDrawTask += (s, e) => {
+                if(e.Info is DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo) {
+                    DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo summaryTaskInfo = (DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo)e.Info;
+                    if(summaryTaskInfo.Type == DevExpress.XtraGantt.Chart.GanttChartItemType.SummaryTask) {
+                        e.Cache.FillRectangle(e.Cache.GetSolidBrush(DXSkinColors.FillColors.Primary), e.Info.VisibleShapeBounds);
+                        e.Cache.DrawRectangle(e.Cache.GetPen(DXSkinColors.FillColors.Primary), e.Info.VisibleShapeBounds);
+                        e.Handled = true;
+                    }
+                }
+            };
         }
 
         void AddColumn(string fieldName, string caption, int width) {
@@ -57,12 +68,17 @@ namespace DXTrello.WinForms {
             // Sync Selection View -> ViewModel
             fluent.WithEvent<FocusedNodeChangedEventArgs>(ganttControl, "FocusedNodeChanged")
                 .SetBinding(vm => vm.SelectedTask, args => ganttControl.GetDataRecordByNode(args.Node) as ProjectTask);
+            fluent.WithEvent<MouseEventArgs>(ganttControl, "MouseDown")
+                .EventToCommand(vm => vm.ClearSelection(), ShouldClickClearSelection);
 
             // Sync Selection ViewModel -> View 
             fluent.SetTrigger(x => x.SelectedTask, (task) => {
-                if (task == null) return;
+                if(task == null) {
+                    ganttControl.ClearFocusedColumn();
+                    return;
+                }
                 var node = ganttControl.FindNodeByFieldValue(nameof(ProjectTask.Id), task.Id);
-                if (node != null && node != ganttControl.FocusedNode)
+                if(node != null && node != ganttControl.FocusedNode)
                     ganttControl.FocusedNode = node;
             });
 
@@ -81,11 +97,21 @@ namespace DXTrello.WinForms {
             fluent.SetBinding(timescaleItem, item => item.Caption, vm => vm.Timescale);
         }
 
+        bool ShouldClickClearSelection(MouseEventArgs args) {
+            var hitInfo = ganttControl.CalcHitInfo(args.Location);
+            if(hitInfo.InChart && hitInfo.ChartHitTest.RowInfo != null)
+                return false;
+            if(hitInfo.InTreeList && hitInfo.TreeListHitTest.InRow)
+                return false;
+            return true;
+        }
+
         void RegisterServices() {
             mvvmContext.RegisterService(this);
         }
 
         void SetTaskTableVisibility(bool visible) {
+            ganttControl.ClearSelection();
             ganttControl.OptionsSplitter.PanelVisibility = visible ? GanttPanelVisibility.Both : GanttPanelVisibility.Chart;
         }
         void SetTimelineVisibility(bool visible) {
