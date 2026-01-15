@@ -3,13 +3,12 @@ using DXTrello.Core.Models;
 
 namespace DXTrello.Core.Services {
     public sealed class SampleTaskDataService : ITaskDataService {
+        public static IList<TeamMember> Users = new List<TeamMember> {
+                new TeamMember { Id = 1, Login = "octocat", DisplayName = "Octo Cat" },
+                new TeamMember { Id = 2, Login = "spacewhale", DisplayName = "Space Whale" },
+                new TeamMember { Id = 3, Login = "dev-bot", DisplayName = "Automation Bot" }
+            };
         public Task<IList<ProjectTask>> GetProjectTasksAsync(CancellationToken cancellationToken = default) {
-            var team = new[] {
-                    new TeamMember { Id = 1, Login = "octocat", DisplayName = "Octo Cat" },
-                    new TeamMember { Id = 2, Login = "spacewhale", DisplayName = "Space Whale" },
-                    new TeamMember { Id = 3, Login = "dev-bot", DisplayName = "Automation Bot" }
-                };
-
             var today = DateTime.Today;
             var tasks = new List<ProjectTask> {
                     new() {
@@ -20,7 +19,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(-12),
                         Status = ProjectTaskStatus.Done,
                         Progress = 1.0,
-                        Assignee = team[0]
+                        Assignee = Users[0]
                     },
                     new() {
                         Id = 2,
@@ -30,7 +29,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(-9),
                         Status = ProjectTaskStatus.Done,
                         Progress = 1.0,
-                        Assignee = team[1],
+                        Assignee = Users[1],
                         DependencyIds = { 1 }
                     },
                     new() {
@@ -41,7 +40,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(-7),
                         Status = ProjectTaskStatus.Done,
                         Progress = 1.0,
-                        Assignee = team[2],
+                        Assignee = Users[2],
                         DependencyIds = { 2 }
                     },
                     new() {
@@ -52,7 +51,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(-5),
                         Status = ProjectTaskStatus.Done,
                         Progress = 1.0,
-                        Assignee = team[0],
+                        Assignee = Users[0],
                         DependencyIds = { 3 }
                     },
                     new() {
@@ -63,7 +62,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(3),
                         Status = ProjectTaskStatus.InProgress,
                         Progress = 0.45,
-                        Assignee = team[1],
+                        Assignee = Users[1],
                         DependencyIds = { 4 }
                     },
                     new() {
@@ -75,7 +74,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(-1),
                         Status = ProjectTaskStatus.Review,
                         Progress = 0.85,
-                        Assignee = team[1]
+                        Assignee = Users[1]
                     },
                     new() {
                         Id = 7,
@@ -85,7 +84,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(5),
                         Status = ProjectTaskStatus.InProgress,
                         Progress = 0.3,
-                        Assignee = team[2]
+                        Assignee = Users[2]
                     },
                     new() {
                         Id = 8,
@@ -96,7 +95,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(1),
                         Status = ProjectTaskStatus.InProgress,
                         Progress = 0.6,
-                        Assignee = team[2]
+                        Assignee = Users[2]
                     },
                     new() {
                         Id = 9,
@@ -106,7 +105,7 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(8),
                         Status = ProjectTaskStatus.ToDo,
                         Progress = 0,
-                        Assignee = team[0],
+                        Assignee = Users[0],
                         DependencyIds = { 5, 7 }
                     },
                     new() {
@@ -117,11 +116,14 @@ namespace DXTrello.Core.Services {
                         EndDate = today.AddDays(14),
                         Status = ProjectTaskStatus.ToDo,
                         Progress = 0,
-                        Assignee = team[1],
+                        Assignee = Users[1],
                         DependencyIds = { 9 }
                     }
                 };
             return Task.FromResult(tasks as IList<ProjectTask>);
+        }
+        public Task<IList<TeamMember>> GetTeamMembersAsync(CancellationToken cancellationToken = default) {
+            return Task.FromResult(Users);
         }
     }
 }

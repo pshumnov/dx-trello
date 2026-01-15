@@ -18,9 +18,9 @@ namespace DXTrello.WinForms {
         }
         void RegisterDockPanel(object sender, DockPanelEventArgs e) {
             e.Panel.DockTo(DockingStyle.Right);
-            e.Panel.Visibility = DockVisibility.Hidden;
             e.Panel.Options.ShowAutoHideButton = false;
             e.Panel.Options.ShowCloseButton = false;
+            e.Panel.Width = 450;
         }
         void InitializeBindings() {
             var fluent = mvvmContext.OfType<MainViewModel>();
@@ -35,8 +35,13 @@ namespace DXTrello.WinForms {
         }
         public void ShowDetails(bool show) {
             var targetPanel = dockManager1.Panels[0];
-            targetPanel.Visibility = show ? DockVisibility.Visible : DockVisibility.Hidden;
-            targetPanel.Width = 450;
+            if(show == targetPanel.Visible)
+                return;
+            if(show) {
+                targetPanel.Show();
+            }
+            else
+                targetPanel.Hide();
         }
     }
 }
