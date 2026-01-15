@@ -33,9 +33,11 @@
             layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             simpleSeparator1 = new DevExpress.XtraLayout.SimpleSeparator();
             layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
+            userSelection = new DevExpress.XtraEditors.LookUpEdit();
             ((System.ComponentModel.ISupportInitialize)layoutControl1).BeginInit();
             layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)titleEdit.Properties).BeginInit();
@@ -48,9 +50,11 @@
             ((System.ComponentModel.ISupportInitialize)layoutControlItem1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)simpleSeparator1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)layoutControlItem3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItem3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItem5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)userSelection.Properties).BeginInit();
             SuspendLayout();
             // 
             // layoutControl1
@@ -59,6 +63,7 @@
             layoutControl1.Controls.Add(descriptionEdit);
             layoutControl1.Controls.Add(endDateEdit);
             layoutControl1.Controls.Add(startDateEdit);
+            layoutControl1.Controls.Add(userSelection);
             layoutControl1.Dock = DockStyle.Fill;
             layoutControl1.Location = new Point(0, 0);
             layoutControl1.Name = "layoutControl1";
@@ -87,13 +92,13 @@
             // endDateEdit
             // 
             endDateEdit.EditValue = null;
-            endDateEdit.Location = new Point(92, 523);
+            endDateEdit.Location = new Point(415, 497);
             endDateEdit.Name = "endDateEdit";
             endDateEdit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             endDateEdit.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            endDateEdit.Size = new Size(565, 22);
+            endDateEdit.Size = new Size(242, 22);
             endDateEdit.StyleController = layoutControl1;
-            endDateEdit.TabIndex = 4;
+            endDateEdit.TabIndex = 5;
             // 
             // startDateEdit
             // 
@@ -102,15 +107,15 @@
             startDateEdit.Name = "startDateEdit";
             startDateEdit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             startDateEdit.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            startDateEdit.Size = new Size(565, 22);
+            startDateEdit.Size = new Size(241, 22);
             startDateEdit.StyleController = layoutControl1;
-            startDateEdit.TabIndex = 5;
+            startDateEdit.TabIndex = 3;
             // 
             // Root
             // 
             Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
             Root.GroupBordersVisible = false;
-            Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItem1, simpleSeparator1, layoutControlItem2, layoutControlItem3, layoutControlItem4 });
+            Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItem1, simpleSeparator1, layoutControlItem2, layoutControlItem4, layoutControlItem3, layoutControlItem5 });
             Root.Name = "Root";
             Root.Size = new Size(671, 560);
             Root.TextVisible = false;
@@ -127,7 +132,7 @@
             // 
             // simpleSeparator1
             // 
-            simpleSeparator1.Location = new Point(0, 535);
+            simpleSeparator1.Location = new Point(0, 509);
             simpleSeparator1.Name = "simpleSeparator1";
             simpleSeparator1.Size = new Size(647, 1);
             // 
@@ -141,27 +146,49 @@
             layoutControlItem2.TextLocation = DevExpress.Utils.Locations.Top;
             layoutControlItem2.TextSize = new Size(63, 16);
             // 
-            // layoutControlItem3
-            // 
-            layoutControlItem3.Control = endDateEdit;
-            layoutControlItem3.Location = new Point(0, 509);
-            layoutControlItem3.Name = "layoutControlItem3";
-            layoutControlItem3.Size = new Size(647, 26);
-            layoutControlItem3.Text = "End date";
-            layoutControlItem3.TextSize = new Size(63, 16);
-            // 
             // layoutControlItem4
             // 
             layoutControlItem4.Control = startDateEdit;
             layoutControlItem4.Location = new Point(0, 483);
             layoutControlItem4.Name = "layoutControlItem4";
-            layoutControlItem4.Size = new Size(647, 26);
+            layoutControlItem4.Size = new Size(323, 26);
             layoutControlItem4.Text = "Start date";
             layoutControlItem4.TextSize = new Size(63, 16);
+            // 
+            // layoutControlItem3
+            // 
+            layoutControlItem3.Control = endDateEdit;
+            layoutControlItem3.Location = new Point(323, 483);
+            layoutControlItem3.Name = "layoutControlItem3";
+            layoutControlItem3.Size = new Size(324, 26);
+            layoutControlItem3.Text = "End date";
+            layoutControlItem3.TextSize = new Size(63, 16);
+            // 
+            // layoutControlItem5
+            // 
+            layoutControlItem5.Control = userSelection;
+            layoutControlItem5.Location = new Point(0, 510);
+            layoutControlItem5.Name = "layoutControlItem5";
+            layoutControlItem5.Size = new Size(647, 26);
+            layoutControlItem5.Text = "User";
+            layoutControlItem5.TextLocation = DevExpress.Utils.Locations.Left;
+            layoutControlItem5.TextSize = new Size(63, 16);
             // 
             // mvvmContext
             // 
             mvvmContext.ContainerControl = this;
+            // 
+            // userSelection
+            // 
+            userSelection.EditValue = "";
+            userSelection.Location = new Point(92, 524);
+            userSelection.Name = "userSelection";
+            userSelection.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            userSelection.Properties.NullText = "Select user";
+            userSelection.Properties.PopupSizeable = false;
+            userSelection.Size = new Size(565, 22);
+            userSelection.StyleController = layoutControl1;
+            userSelection.TabIndex = 4;
             // 
             // DetailsView
             // 
@@ -182,9 +209,11 @@
             ((System.ComponentModel.ISupportInitialize)layoutControlItem1).EndInit();
             ((System.ComponentModel.ISupportInitialize)simpleSeparator1).EndInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)layoutControlItem3).EndInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItem3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItem5).EndInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).EndInit();
+            ((System.ComponentModel.ISupportInitialize)userSelection.Properties).EndInit();
             ResumeLayout(false);
         }
 
@@ -202,5 +231,7 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem4;
         private DevExpress.Utils.MVVM.MVVMContext mvvmContext;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem5;
+        private DevExpress.XtraEditors.LookUpEdit userSelection;
     }
 }

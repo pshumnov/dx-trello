@@ -191,6 +191,11 @@ namespace DXTrello.WinForms {
                     x => x.PrependCreateNewTask,
                     args => (ProjectTaskStatus)args.GroupValue
                 );
+            fluent.WithEvent<KeyEventArgs>(tileView, "KeyUp")
+                .EventToCommand(
+                    x => x.ProcessKey,
+                    p => p.KeyValue
+                );
 
             mvvmContext.RegisterService(this);
         }

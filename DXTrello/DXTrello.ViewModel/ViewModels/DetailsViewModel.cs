@@ -2,9 +2,11 @@
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Mvvm.POCO;
 using DXTrello.Core.Models;
+using DXTrello.Core.Services;
 using DXTrello.ViewModel.Messages;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
 
@@ -28,5 +30,16 @@ namespace DXTrello.ViewModel.ViewModels {
                 Task = message.SelectedTask;
         }
         public virtual ProjectTask? Task { get; set; }
+        public virtual ITaskDataService TaskDataService => this.GetService<ITaskDataService>();
+        public virtual IList<TeamMember> Users => TaskDataService.GetTeamMembersAsync().Result;
+        public event EventHandler? FormValidityChanged;
+        bool isFormValid;
+        public virtual bool IsFormValid {
+            get => isFormValid;
+            set {
+                isFormValid = value;
+                FormValidityChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
     }
 }

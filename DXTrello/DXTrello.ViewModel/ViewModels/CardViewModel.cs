@@ -34,6 +34,12 @@ namespace DXTrello.ViewModel.ViewModels {
         public void PrependCreateNewTask(ProjectTaskStatus targetStatus) {
             CreateAndFocusNewTask(targetStatus, true);
         }
+        public void ProcessKey(int key) {
+            if(key == 46 && SelectedTask != null) {
+                Tasks.Remove(SelectedTask);
+                SelectedTask = null;
+            }
+        }
         void CreateAndFocusNewTask(ProjectTaskStatus targetStatus, bool prepend) {
             ProjectTask newTask = new ProjectTask() {
                 Status = targetStatus,
@@ -41,13 +47,13 @@ namespace DXTrello.ViewModel.ViewModels {
                 ParentId = -1
             };
             DetailsViewModel detailsViewModel = DetailsViewModel.Create(newTask);
-            var command = new DelegateCommand(() => {
-            }, () => !string.IsNullOrEmpty(newTask.Title) && newTask.StartDate != DateTime.MinValue);
-            PropertyChangedEventHandler propertyChangedFunc = (s, e) => {
+            var command = new DelegateCommand(() => { },
+                () => detailsViewModel.IsFormValid);
+            EventHandler? formValidityChangedHandler = (s, e) => {
                 command.RaiseCanExecuteChanged();
             };
             try {
-                newTask.PropertyChanged += propertyChangedFunc;
+                detailsViewModel.FormValidityChanged += formValidityChangedHandler;
                 List<UICommand> buttons = new List<UICommand>() {
                 new UICommand {
                     Id = "Create",
@@ -68,7 +74,7 @@ namespace DXTrello.ViewModel.ViewModels {
                 }
             }
             finally {
-                newTask.PropertyChanged -= propertyChangedFunc;
+                detailsViewModel.FormValidityChanged -= formValidityChangedHandler;
             }
         }
     }
