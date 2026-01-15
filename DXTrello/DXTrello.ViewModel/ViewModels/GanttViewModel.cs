@@ -17,6 +17,7 @@ namespace DXTrello.ViewModel.ViewModels {
         }
         public virtual BindingList<ProjectTask> Tasks { get; protected set; }
         public virtual ProjectTask? SelectedTask { get; set; }
+        public virtual TimePeriodEnum TimePeriod { get; set; } = TimePeriodEnum.Week;
 
         protected void OnSelectedTaskChanged() {
             Messenger.Default.Send(new SelectedTaskChangedMessage(SelectedTask));
@@ -25,5 +26,11 @@ namespace DXTrello.ViewModel.ViewModels {
             if(SelectedTask != message.SelectedTask)
                 SelectedTask = message.SelectedTask;
         }
+    }
+    public enum TimePeriodEnum {
+        Day,
+        Week,
+        Month,
+        Quarter
     }
 }

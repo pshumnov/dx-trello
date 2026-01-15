@@ -3,6 +3,7 @@ using DXTrello.Core.Models;
 using DevExpress.XtraGantt;
 using DevExpress.XtraTreeList;
 using DevExpress.XtraTreeList.Columns;
+using DevExpress.XtraBars;
 
 namespace DXTrello.WinForms {
     public partial class GanttView : DevExpress.XtraEditors.XtraUserControl {
@@ -33,6 +34,8 @@ namespace DXTrello.WinForms {
             // Allow user interaction
             ganttControl1.OptionsCustomization.AllowModifyTasks = DevExpress.Utils.DefaultBoolean.True;
             ganttControl1.OptionsBehavior.Editable = true;
+
+            //
         }
 
         void AddColumn(string fieldName, string caption, int width) {
@@ -49,7 +52,7 @@ namespace DXTrello.WinForms {
 
             // Sync Selection View -> ViewModel
             fluent.WithEvent<FocusedNodeChangedEventArgs>(ganttControl1, "FocusedNodeChanged")
-                .SetBinding(x => x.SelectedTask, args => ganttControl1.GetDataRecordByNode(args.Node) as ProjectTask);
+                .SetBinding(vm => vm.SelectedTask, args => ganttControl1.GetDataRecordByNode(args.Node) as ProjectTask);
 
             // Sync Selection ViewModel -> View 
             fluent.SetTrigger(x => x.SelectedTask, (task) => {
@@ -58,6 +61,13 @@ namespace DXTrello.WinForms {
                 if (node != null && node != ganttControl1.FocusedNode)
                     ganttControl1.FocusedNode = node;
             });
+
+            // Today Button
+
+            // Time Period ListBox
+            fluent.WithEvent<ListItemClickEventArgs>(timePeriodItem, "ListItemClick")
+                .SetBinding(vm => vm.TimePeriod, args => Enum.Parse<TimePeriodEnum>(timePeriodItem.Strings[args.Index]));
+            fluent.SetBinding(timePeriodItem, item => item.Caption, vm => vm.TimePeriod);
         }
     }
 }
