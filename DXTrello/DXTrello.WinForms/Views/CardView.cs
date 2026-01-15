@@ -110,6 +110,8 @@ namespace DXTrello.WinForms {
                     flex-grow: 1;
                     color: @DisabledText;
                     overflow: hidden;
+                    white-space: normal;
+                    text-overflow: ellipsis;
                 }
                 .footer {
                     display: flex;

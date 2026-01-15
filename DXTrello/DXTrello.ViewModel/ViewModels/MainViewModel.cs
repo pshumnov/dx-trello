@@ -21,11 +21,12 @@ namespace DXTrello.ViewModel.ViewModels {
 
             CardViewModel = CardViewModel.Create(Tasks).SetParentViewModel(this);
             GanttViewModel = GanttViewModel.Create(Tasks).SetParentViewModel(this);
+            DetailsViewModel = DetailsViewModel.Create().SetParentViewModel(this);
         }
 
         public virtual CardViewModel CardViewModel { get; protected set; }
         public virtual GanttViewModel GanttViewModel { get; protected set; }
-
+        public virtual DetailsViewModel DetailsViewModel { get; protected set; }
         public string Title { get; }
         public virtual BindingList<ProjectTask> Tasks { get; protected set; }
         public virtual int SelectedViewIndex { get; set; }

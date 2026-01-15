@@ -33,10 +33,10 @@ namespace DXTrello.WinForms {
         void InitializeBindings() {
             var fluent = mvvmContext.OfType<DetailsViewModel>();
 
-            fluent.SetBinding(titleEdit, e => e.EditValue, vm => vm.Task.Title);
-            fluent.SetBinding(descriptionEdit, e => e.EditValue, vm => vm.Task.Description);
-            fluent.SetBinding(startDateEdit, e => e.EditValue, vm => vm.Task.StartDate);
-            fluent.SetBinding(endDateEdit, e => e.EditValue, vm => vm.Task.EndDate);
+            fluent.SetBinding(titleEdit, t => t.EditValue, vm => vm.Task.Title);
+            fluent.SetBinding(descriptionEdit, t => t.EditValue, vm => vm.Task.Description);
+            fluent.SetBinding(startDateEdit, t => t.EditValue, vm => vm.Task.StartDate);
+            fluent.SetBinding(endDateEdit, t => t.EditValue, vm => vm.Task.EndDate);
         }
     }
 }
