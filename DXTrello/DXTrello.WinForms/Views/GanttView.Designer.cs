@@ -25,32 +25,33 @@
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GanttView));
-            ganttControl1 = new DevExpress.XtraGantt.GanttControl();
+            ganttControl = new DevExpress.XtraGantt.GanttControl();
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
             barManager1 = new DevExpress.XtraBars.BarManager(components);
             bar1 = new DevExpress.XtraBars.Bar();
-            taskTableItem = new DevExpress.XtraBars.BarButtonItem();
+            toggleTreeItem = new DevExpress.XtraBars.BarButtonItem();
+            toggleTimelineItem = new DevExpress.XtraBars.BarButtonItem();
             todayItem = new DevExpress.XtraBars.BarButtonItem();
-            timePeriodItem = new DevExpress.XtraBars.BarListItem();
+            timescaleItem = new DevExpress.XtraBars.BarListItem();
             barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             repositoryItemComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            ((System.ComponentModel.ISupportInitialize)ganttControl1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ganttControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)repositoryItemComboBox1).BeginInit();
             SuspendLayout();
             // 
-            // ganttControl1
+            // ganttControl
             // 
-            ganttControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            ganttControl1.Dock = DockStyle.Fill;
-            ganttControl1.Location = new Point(0, 34);
-            ganttControl1.Name = "ganttControl1";
-            ganttControl1.Size = new Size(992, 670);
-            ganttControl1.TabIndex = 0;
+            ganttControl.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            ganttControl.Dock = DockStyle.Fill;
+            ganttControl.Location = new Point(0, 34);
+            ganttControl.Name = "ganttControl";
+            ganttControl.Size = new Size(992, 670);
+            ganttControl.TabIndex = 0;
             // 
             // mvvmContext
             // 
@@ -64,8 +65,8 @@
             barManager1.DockControls.Add(barDockControlLeft);
             barManager1.DockControls.Add(barDockControlRight);
             barManager1.Form = this;
-            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { taskTableItem, todayItem, timePeriodItem });
-            barManager1.MaxItemId = 6;
+            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { toggleTreeItem, todayItem, timescaleItem, toggleTimelineItem });
+            barManager1.MaxItemId = 7;
             barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] { repositoryItemComboBox1 });
             // 
             // bar1
@@ -74,15 +75,22 @@
             bar1.DockCol = 0;
             bar1.DockRow = 0;
             bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
-            bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(taskTableItem), new DevExpress.XtraBars.LinkPersistInfo(todayItem), new DevExpress.XtraBars.LinkPersistInfo(timePeriodItem) });
+            bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(toggleTreeItem), new DevExpress.XtraBars.LinkPersistInfo(toggleTimelineItem), new DevExpress.XtraBars.LinkPersistInfo(todayItem), new DevExpress.XtraBars.LinkPersistInfo(timescaleItem) });
             bar1.Text = "Tools";
             // 
-            // taskTableItem
+            // toggleTreeItem
             // 
-            taskTableItem.Caption = "barButtonItem1";
-            taskTableItem.Id = 0;
-            taskTableItem.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("taskTableItem.ImageOptions.SvgImage");
-            taskTableItem.Name = "taskTableItem";
+            toggleTreeItem.Caption = "Task Table";
+            toggleTreeItem.Id = 0;
+            toggleTreeItem.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("taskPanelItem.ImageOptions.SvgImage");
+            toggleTreeItem.Name = "toggleTreeItem";
+            // 
+            // toggleTimelineItem
+            // 
+            toggleTimelineItem.Caption = "Timeline";
+            toggleTimelineItem.Id = 6;
+            toggleTimelineItem.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("timelineItem.ImageOptions.SvgImage");
+            toggleTimelineItem.Name = "toggleTimelineItem";
             // 
             // todayItem
             // 
@@ -92,11 +100,11 @@
             // 
             // timePeriodItem
             // 
-            timePeriodItem.Caption = "Day";
-            timePeriodItem.Id = 5;
-            timePeriodItem.Name = "timePeriodItem";
-            timePeriodItem.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.Caption;
-            timePeriodItem.Strings.AddRange(new object[] { "Day", "Week", "Month", "Quarter" });
+            timescaleItem.Caption = "Day";
+            timescaleItem.Id = 5;
+            timescaleItem.Name = "timePeriodItem";
+            timescaleItem.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.Caption;
+            timescaleItem.Strings.AddRange(new object[] { "Day", "Week", "Month", "Quarter" });
             // 
             // barDockControlTop
             // 
@@ -142,14 +150,14 @@
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(ganttControl1);
+            Controls.Add(ganttControl);
             Controls.Add(barDockControlLeft);
             Controls.Add(barDockControlRight);
             Controls.Add(barDockControlBottom);
             Controls.Add(barDockControlTop);
             Name = "GanttView";
             Size = new Size(992, 704);
-            ((System.ComponentModel.ISupportInitialize)ganttControl1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ganttControl).EndInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).EndInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).EndInit();
             ((System.ComponentModel.ISupportInitialize)repositoryItemComboBox1).EndInit();
@@ -159,17 +167,18 @@
 
         #endregion
 
-        private DevExpress.XtraGantt.GanttControl ganttControl1;
+        private DevExpress.XtraGantt.GanttControl ganttControl;
         private DevExpress.Utils.MVVM.MVVMContext mvvmContext;
         private DevExpress.XtraBars.BarDockControl barDockControlLeft;
         private DevExpress.XtraBars.BarManager barManager1;
         private DevExpress.XtraBars.Bar bar1;
-        private DevExpress.XtraBars.BarButtonItem taskTableItem;
+        private DevExpress.XtraBars.BarButtonItem toggleTreeItem;
         private DevExpress.XtraBars.BarButtonItem todayItem;
         private DevExpress.XtraBars.BarDockControl barDockControlTop;
         private DevExpress.XtraBars.BarDockControl barDockControlBottom;
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
-        private DevExpress.XtraBars.BarListItem timePeriodItem;
+        private DevExpress.XtraBars.BarListItem timescaleItem;
+        private DevExpress.XtraBars.BarButtonItem toggleTimelineItem;
     }
 }
