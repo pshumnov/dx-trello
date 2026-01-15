@@ -19,7 +19,6 @@ namespace DXTrello.ViewModel.ViewModels {
         }
         public virtual BindingList<ProjectTask> Tasks { get; protected set; }
         public virtual ProjectTask? SelectedTask { get; set; }
-        public virtual ICardViewService CardViewService => this.GetService<ICardViewService>();
         public virtual IDialogService DialogService => this.GetService<IDialogService>();
 
         protected void OnSelectedTaskChanged() {

@@ -8,9 +8,10 @@ using DevExpress.Utils.Html.ViewInfo;
 using DXTrello.Core.Enums;
 using DXTrello.ViewModel.Services;
 using DevExpress.Utils.MVVM.Services;
+using DevExpress.XtraGrid;
 
 namespace DXTrello.WinForms {
-    public partial class CardView : DevExpress.XtraEditors.XtraUserControl, ICardViewService {
+    public partial class CardView : DevExpress.XtraEditors.XtraUserControl {
         TileView tileView;
 
         public CardView() {
@@ -27,6 +28,12 @@ namespace DXTrello.WinForms {
             tileView = new TileView(gridControl1);
             gridControl1.MainView = tileView;
             tileView.CustomItemTemplate += CustomItemTemplate;
+            tileView.MouseDown += (s, e) => {
+                var hitInfo = tileView.CalcHitInfo(e.Location);
+                if(hitInfo.HitTest != DevExpress.XtraEditors.TileControlHitTest.Item) {
+                    tileView.FocusedRowHandle = GridControl.InvalidRowHandle;
+                }
+            };
 
             // Define Columns
             var colId = AddColumn(nameof(ProjectTask.Id));
@@ -164,9 +171,12 @@ namespace DXTrello.WinForms {
 
             // Sync Selection ViewModel -> View
             fluent.SetTrigger(x => x.SelectedTask, (task) => {
-                if (task == null) return;
+                if(task == null) {
+                    tileView.FocusedRowHandle = GridControl.InvalidRowHandle;
+                    return;
+                }
                 int rowHandle = tileView.LocateByValue(nameof(ProjectTask.Id), task.Id);
-                if (rowHandle != DevExpress.XtraGrid.GridControl.InvalidRowHandle && rowHandle != tileView.FocusedRowHandle)
+                if (rowHandle != GridControl.InvalidRowHandle && rowHandle != tileView.FocusedRowHandle)
                     tileView.FocusedRowHandle = rowHandle;
             });
 
@@ -188,10 +198,6 @@ namespace DXTrello.WinForms {
         void RegisterServices() {
             mvvmContext.RegisterService(this);
             mvvmContext.RegisterService(DialogService.CreateXtraDialogService(this));
-        }
-
-        void ICardViewService.ShowEditForm() {
-            tileView.ShowEditForm();
         }
     }
 }
