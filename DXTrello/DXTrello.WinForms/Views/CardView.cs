@@ -45,6 +45,20 @@ namespace DXTrello.WinForms {
             var colAssignee = AddColumn(nameof(ProjectTask.AssigneeName));
             var colDesc = AddColumn(nameof(ProjectTask.Description));
 
+            // Define groups
+            var todo = tileView.OptionsKanban.Groups.Add();
+            todo.GroupValue = ProjectTaskStatus.ToDo;
+            todo.Caption = "To Do";
+            var inprogress = tileView.OptionsKanban.Groups.Add();
+            inprogress.GroupValue = ProjectTaskStatus.InProgress;
+            inprogress.Caption = "In Progress";
+            var review = tileView.OptionsKanban.Groups.Add();
+            review.GroupValue = ProjectTaskStatus.Review;
+            review.Caption = "Review";
+            var done = tileView.OptionsKanban.Groups.Add();
+            done.GroupValue = ProjectTaskStatus.Done;
+            done.Caption = "Done";
+
             // Configure Kanban Mode
             tileView.OptionsTiles.LayoutMode = TileViewLayoutMode.Kanban;
             tileView.OptionsTiles.VerticalContentAlignment = VertAlignment.Top;
