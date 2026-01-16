@@ -19,30 +19,39 @@ namespace DXTrello.ViewModel.ViewModels {
             this.taskDataService = taskDataService ?? throw new ArgumentNullException(nameof(taskDataService));
             Title = "DXTrello";
             Tasks = [];
+            Users = [];
             SelectedViewIndex = 0;
             Messenger.Default.Register<ToggleDetailsWindowMessage>(this, OnToggleMessageReceived);
 
-            CardViewModel = CardViewModel.Create(Tasks).SetParentViewModel(this);
+            CardViewModel = CardViewModel.Create(Tasks, Users).SetParentViewModel(this);
             GanttViewModel = GanttViewModel.Create(Tasks).SetParentViewModel(this);
             DetailsViewModel = DetailsViewModel.Create().SetParentViewModel(this);
         }
         public virtual CardViewModel CardViewModel { get; protected set; }
         public virtual GanttViewModel GanttViewModel { get; protected set; }
         public virtual DetailsViewModel DetailsViewModel { get; protected set; }
-        public string Title { get; }
         public virtual BindingList<ProjectTask> Tasks { get; protected set; }
+        public virtual BindingList<TeamMember> Users { get; protected set; }
+        public string Title { get; }
         public virtual int SelectedViewIndex { get; set; }
         public virtual IToggleDetailsService ToggleDetailsService => this.GetService<IToggleDetailsService>();
 
         public async Task OnViewLoad() {
             await LoadProjectTasks();
+            await LoadUsersAsync();
             InitDocuments();
         }
-        public async Task LoadProjectTasks() {
+        async Task LoadProjectTasks() {
             var data = await taskDataService.GetProjectTasksAsync().ConfigureAwait(false);
             Tasks.Clear();
             foreach(var item in data)
                 Tasks.Add(item);
+        }
+        async Task LoadUsersAsync() {
+            var members = await taskDataService.GetTeamMembersAsync();
+            Users.Clear();
+            foreach(var user in members)
+                Users.Add(user);
         }
         public void InitDocuments() {
             var tdms = this.GetService<IDocumentManagerService>("TabbedView");

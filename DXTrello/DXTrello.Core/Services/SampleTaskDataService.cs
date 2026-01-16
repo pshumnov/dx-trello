@@ -4,9 +4,9 @@ using DXTrello.Core.Models;
 namespace DXTrello.Core.Services {
     public sealed class SampleTaskDataService : ITaskDataService {
         public static IList<TeamMember> Users = new List<TeamMember> {
-                new TeamMember { Id = 1, Login = "octocat", DisplayName = "Octo Cat" },
-                new TeamMember { Id = 2, Login = "spacewhale", DisplayName = "Space Whale" },
-                new TeamMember { Id = 3, Login = "dev-bot", DisplayName = "Automation Bot" }
+                new TeamMember { Id = 1, Login = "octocat", DisplayName = "Octo Cat", AvatarUrl = "https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_1.png" },
+                new TeamMember { Id = 2, Login = "spacewhale", DisplayName = "Space Whale", AvatarUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/321.png" },
+                new TeamMember { Id = 3, Login = "dev-bot", DisplayName = "Automation Bot", AvatarUrl = "https://avatars.githubusercontent.com/in/15368?s=64&v=4" }
             };
         public Task<IList<ProjectTask>> GetProjectTasksAsync(CancellationToken cancellationToken = default) {
             var today = DateTime.Today;

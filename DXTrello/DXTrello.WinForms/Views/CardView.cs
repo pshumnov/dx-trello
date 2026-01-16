@@ -9,9 +9,12 @@ using DXTrello.Core.Enums;
 using DXTrello.ViewModel.Services;
 using DevExpress.Utils.MVVM.Services;
 using DevExpress.XtraGrid;
+using DXTrello.Core.Services;
+using System.Net.Http;
+using System.IO;
 
 namespace DXTrello.WinForms {
-    public partial class CardView : DevExpress.XtraEditors.XtraUserControl {
+    public partial class CardView : DevExpress.XtraEditors.XtraUserControl, ICardViewService {
         TileView tileView;
 
         public CardView() {
@@ -43,6 +46,7 @@ namespace DXTrello.WinForms {
             var colEndDate = AddColumn(nameof(ProjectTask.EndDate));
             var colStartDate = AddColumn(nameof(ProjectTask.StartDate));
             var colAssignee = AddColumn(nameof(ProjectTask.AssigneeName));
+            var colAvatar = AddColumn(nameof(ProjectTask.AssigneeAvatar));
             var colDesc = AddColumn(nameof(ProjectTask.Description));
 
             // Define groups
@@ -93,7 +97,10 @@ namespace DXTrello.WinForms {
                     <div class='desc'>${TrimmedDescription}</div>
                     <div class='footer'>
                         <div class='date-badge'>${EndDate}</div>
-                        <div class='user'>${AssigneeName}</div>
+                        <div class='user-container'>
+                            <img src='${AssigneeAvatar}' class='avatar'/>
+                            <div class='user'>${AssigneeName}</div>
+                        </div>
                     </div>
                 </div>";
 
@@ -105,7 +112,10 @@ namespace DXTrello.WinForms {
                     <div class='desc'>${TrimmedDescription}</div>
                     <div class='footer'>
                         <div class='spacer'></div>
-                        <div class='user'>${AssigneeName}</div>
+                        <div class='user-container'>
+                            <img src='${AssigneeAvatar}' class='avatar'/>
+                            <div class='user'>${AssigneeName}</div>
+                        </div>
                     </div>
                 </div>";
 
@@ -140,6 +150,17 @@ namespace DXTrello.WinForms {
                     justify-content: space-between;
                     align-items: center;
                     margin-top: 8px;
+                }
+                .user-container {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 4px;
+                }
+                .avatar {
+                    width: 16px;
+                    height: 16px;
+                    border-radius: 50%;
                 }
                 .date-badge {
                     background-color: @Highlight;
@@ -177,6 +198,7 @@ namespace DXTrello.WinForms {
         void InitializeBindings() {
             var fluent = mvvmContext.OfType<CardViewModel>();
             fluent.SetBinding(gridControl1, g => g.DataSource, x => x.Tasks);
+            fluent.SetTrigger(x => x.Users, LoadAvatars);
 
             // Sync Selection View -> ViewModel
             fluent.WithEvent<DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs>(
@@ -193,6 +215,9 @@ namespace DXTrello.WinForms {
                 if (rowHandle != GridControl.InvalidRowHandle && rowHandle != tileView.FocusedRowHandle)
                     tileView.FocusedRowHandle = rowHandle;
             });
+
+            fluent.WithEvent(this, "Load")
+                .EventToCommand(x => x.OnViewLoad);
 
             // Handle buttons
             fluent.WithEvent<GroupFooterButtonClickEventArgs>(tileView, "GroupFooterButtonClick")
@@ -221,6 +246,23 @@ namespace DXTrello.WinForms {
         void RegisterServices() {
             mvvmContext.RegisterService(this);
             mvvmContext.RegisterService(DialogService.CreateXtraDialogService(this));
+        }
+
+        public async void LoadAvatars(IList<TeamMember> users) {
+            if(users == null) return;
+            var collection = new ImageCollection();
+            using HttpClient client = new HttpClient();
+            foreach(var user in users) {
+                if(string.IsNullOrEmpty(user.AvatarUrl)) continue;
+                try {
+                    var bytes = await client.GetByteArrayAsync(user.AvatarUrl);
+                    using var ms = new MemoryStream(bytes);
+                    using var tempImage = Image.FromStream(ms);
+                    collection.AddImage(new Bitmap(tempImage), user.AvatarUrl);
+                }
+                catch { }
+            }
+            tileView.HtmlImages = collection;
         }
     }
 }

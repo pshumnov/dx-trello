@@ -57,8 +57,10 @@ namespace DXTrello.Core.Models {
         public TeamMember? Assignee { 
             get => assignee; 
             set {
-                if (SetField(ref assignee, value))
+                if (SetField(ref assignee, value)) {
                     OnPropertyChanged(nameof(AssigneeName));
+                    OnPropertyChanged(nameof(AssigneeAvatar));
+                }
             }
         }
 
@@ -67,5 +69,6 @@ namespace DXTrello.Core.Models {
 
         public string StatusDisplay => Status.ToString();
         public string AssigneeName => Assignee?.DisplayName ?? Assignee?.Login ?? string.Empty;
+        public string AssigneeAvatar => Assignee?.AvatarUrl ?? string.Empty;
     }
 }
