@@ -5,8 +5,6 @@ using DevExpress.XtraTreeList;
 using DevExpress.XtraTreeList.Columns;
 using DevExpress.XtraBars;
 using DXTrello.ViewModel.Services;
-using DevExpress.XtraRichEdit.Layout.Engine;
-using DevExpress.XtraRichEdit.Commands.Internal;
 using DevExpress.LookAndFeel;
 
 namespace DXTrello.WinForms {
@@ -45,10 +43,33 @@ namespace DXTrello.WinForms {
                 if(e.Info is DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo) {
                     DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo summaryTaskInfo = (DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo)e.Info;
                     if(summaryTaskInfo.Type == DevExpress.XtraGantt.Chart.GanttChartItemType.SummaryTask) {
-                        e.Cache.FillRectangle(e.Cache.GetSolidBrush(DXSkinColors.FillColors.Primary), e.Info.VisibleShapeBounds);
-                        e.Cache.DrawRectangle(e.Cache.GetPen(DXSkinColors.FillColors.Primary), e.Info.VisibleShapeBounds);
+                        e.Cache.FillRectangle(DXSkinColors.FillColors.Primary, e.Info.VisibleShapeBounds);
                         e.Handled = true;
                     }
+                }
+            };
+            ganttControl.CustomDrawTimescaleColumn += (s, e) => {
+                const float lineWidth = 1f, pointRadius = 4f, textInflate = 4f;
+                const int textRectThickness = 2;
+                DateTime today = DateTime.Now;
+
+                if(today >= e.Column.StartDate && today < e.Column.FinishDate && e.Column.Bounds.Y > 0) {
+                    e.DefaultDraw();
+                    var lineStart = new PointF((float)e.GetPosition(today), e.Column.VisibleHeaderBounds.Bottom);
+                    var lineRect = new RectangleF(lineStart, new SizeF(lineWidth, e.Column.Bounds.Height));
+                    var pointRect = new RectangleF(lineStart.X - pointRadius, lineStart.Y - pointRadius, pointRadius * 2, pointRadius * 2);
+                    var textRect = e.Column.TextBounds;
+                    textRect.Inflate(textInflate, textInflate);
+
+                    var previousSmoothingMode = e.Cache.SmoothingMode;
+                    e.Cache.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                    e.Cache.FillRectangle(DXSkinColors.FillColors.Danger, lineRect);
+                    e.Cache.FillEllipse(DXSkinColors.FillColors.Danger, pointRect);
+                    e.Cache.DrawRectangle(textRect.X, textRect.Y, textRect.Width, textRect.Height, DXSkinColors.FillColors.Danger, textRectThickness);
+
+                    e.Cache.SmoothingMode = previousSmoothingMode;
+                    e.Handled = true;
                 }
             };
         }
