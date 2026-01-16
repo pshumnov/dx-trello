@@ -12,6 +12,7 @@ using DevExpress.XtraGrid;
 using DXTrello.Core.Services;
 using System.Net.Http;
 using System.IO;
+using DXTrello.WinForms.HTMLTemplates;
 
 namespace DXTrello.WinForms {
     public partial class CardView : DevExpress.XtraEditors.XtraUserControl, ICardViewService {
@@ -89,38 +90,8 @@ namespace DXTrello.WinForms {
             tileView.OptionsTiles.ItemSize = new Size(300, 0);
             tileView.OptionsHtmlTemplate.ItemAutoHeight = true;
 
-            // Setting HTML template for cards with End Date.
-            HtmlTemplate endDateCardTemplate = new HtmlTemplate();
-            endDateCardTemplate.Template = @"
-                <div class='card'>
-                    <div class='title'>${Title}</div>
-                    <div class='desc'>${TrimmedDescription}</div>
-                    <div class='footer'>
-                        <div class='date-badge'>${EndDate}</div>
-                        <div class='user-container'>
-                            <img src='${AssigneeAvatar}' class='avatar'/>
-                            <div class='user'>${AssigneeName}</div>
-                        </div>
-                    </div>
-                </div>";
-
-            // Setting HTML template for cards without End Date.
-            HtmlTemplate cardTemplate = new HtmlTemplate();
-            cardTemplate.Template = @"
-                <div class='card'>
-                    <div class='title'>${Title}</div>
-                    <div class='desc'>${TrimmedDescription}</div>
-                    <div class='footer'>
-                        <div class='spacer'></div>
-                        <div class='user-container'>
-                            <img src='${AssigneeAvatar}' class='avatar'/>
-                            <div class='user'>${AssigneeName}</div>
-                        </div>
-                    </div>
-                </div>";
-
             // Setting default template and styles.
-            tileView.TileHtmlTemplate.Template = cardTemplate.Template;
+            tileView.TileHtmlTemplate.Template = CardHTMLTemplates.CardTemplate;
             tileView.TileHtmlTemplate.Styles = @"
                 .card {
                     display: flex;
@@ -153,15 +124,19 @@ namespace DXTrello.WinForms {
                 }
                 .user-container {
                     display: flex;
-                    flex-direction: row;
                     align-items: center;
-                    gap: 4px;
+                    width: 50%;
                 }
                 .avatar {
                     width: 16px;
                     height: 16px;
                     border-radius: 50%;
+                    flex-shrink: 0;
                 }
+                .date-container {
+                    display: flex;
+                    width: 50%;
+				}
                 .date-badge {
                     background-color: @Highlight;
                     color: @HighlightText;
@@ -169,25 +144,22 @@ namespace DXTrello.WinForms {
                     padding: 2px 6px;
                     font-size: 8px;
                 }
-                .spacer {
-                    padding: 2px 6px;
-                }
                 .user {
                     font-size: 8px;
                     font-weight: 600;
                     color: @ControlText;
+                    overflow: hidden;
+                    white-space: normal;
+                    text-overflow: ellipsis;
+                    text-align: center;
+                    width: 100%;
                 }
             ";
-
-            tileView.TileHtmlTemplates.AddRange([endDateCardTemplate, cardTemplate]);
         }
 
         void CustomItemTemplate(object sender, TileViewCustomItemTemplateEventArgs e) {
-            var endDateValue = tileView.GetRowCellValue(e.RowHandle, nameof(ProjectTask.EndDate));
-            DateTime endDate = endDateValue != null ? (DateTime)endDateValue : DateTime.MinValue;
-            HtmlTemplate targetTemplate = endDate != DateTime.MinValue ?
-                tileView.TileHtmlTemplates[0] : tileView.TileHtmlTemplates[1];
-            e.HtmlTemplate.Template = targetTemplate.Template;
+            var task = tileView.GetRow(e.RowHandle) as ProjectTask;
+            e.HtmlTemplate.Template = CardHTMLTemplates.GetCardTemplate(task);
         }
 
         TileViewColumn AddColumn(string fieldName) {

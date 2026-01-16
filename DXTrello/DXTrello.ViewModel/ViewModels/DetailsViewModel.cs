@@ -15,6 +15,7 @@ namespace DXTrello.ViewModel.ViewModels {
     public class DetailsViewModel {
         public DetailsViewModel() {
             Messenger.Default.Register<SelectedTaskChangedMessage>(this, OnMessageReceived);
+            Messenger.Default.Register<ToggleDetailsWindowMessage>(this, OnDetailsMessageReceived);
         }
         protected DetailsViewModel(ProjectTask? focusedTask) {
             Task = focusedTask;
@@ -26,11 +27,32 @@ namespace DXTrello.ViewModel.ViewModels {
             return ViewModelSource.Create(() => new DetailsViewModel());
         }
         void OnMessageReceived(SelectedTaskChangedMessage message) {
-            if(Task != message.SelectedTask)
-                Task = message.SelectedTask;
+            if(SourceTask != message.SelectedTask) {
+                SaveObjectIfFormIsValid();
+                SourceTask = message.SelectedTask;
+                Task = message.SelectedTask?.Clone();
+            }
         }
+        void OnDetailsMessageReceived(ToggleDetailsWindowMessage message) {
+            if(!message.Show) {
+                SaveObjectIfFormIsValid();
+            }
+        }
+        void SaveObjectIfFormIsValid() {
+            FormValidationService?.ValidateForm();
+            if (IsFormValid && SourceTask != null && Task != null) {
+                SourceTask.Title = Task.Title;
+                SourceTask.Description = Task.Description;
+                SourceTask.StartDate = Task.StartDate;
+                SourceTask.EndDate = Task.EndDate;
+                SourceTask.Status = Task.Status;
+                SourceTask.Assignee = Task.Assignee;
+            }
+        }
+        public virtual ProjectTask? SourceTask { get; set; }
         public virtual ProjectTask? Task { get; set; }
         public virtual ITaskDataService TaskDataService => this.GetService<ITaskDataService>();
+        public virtual IFormValidationService FormValidationService => this.GetService<IFormValidationService>();
         public virtual IList<TeamMember> Users => TaskDataService.GetTeamMembersAsync().Result;
         public event EventHandler? FormValidityChanged;
         bool isFormValid;

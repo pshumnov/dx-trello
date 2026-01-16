@@ -25,6 +25,10 @@ namespace DXTrello.Core.Models {
             return source.Substring(0, finalIndex) + "...";
         }
 
+        public ProjectTask Clone() {
+            return (ProjectTask) MemberwiseClone();
+        }
+
         private long id;
         public long Id { get => id; set => SetField(ref id, value); }
 

@@ -17,7 +17,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace DXTrello.WinForms {
-    public partial class DetailsView : XtraUserControl, INotifyPropertyChanged {
+    public partial class DetailsView : XtraUserControl, INotifyPropertyChanged, IFormValidationService {
         public DetailsView() {
             InitializeComponent();
             if(!mvvmContext.IsDesignMode) {
@@ -101,22 +101,24 @@ namespace DXTrello.WinForms {
         void InitializeBindings() {
             var fluent = mvvmContext.OfType<DetailsViewModel>();
             mvvmContext.RegisterService(new SampleTaskDataService());
+            mvvmContext.RegisterService(this);
 
             fluent.SetBinding(titleEdit, t => t.EditValue, vm => vm.Task.Title);
             fluent.SetBinding(descriptionEdit, t => t.EditValue, vm => vm.Task.Description);
             fluent.SetBinding(startDateEdit, t => t.EditValue, vm => vm.Task.StartDate);
             fluent.SetBinding(endDateEdit, t => t.EditValue, vm => vm.Task.EndDate);
             fluent.SetBinding(userSelection, us => us.EditValue, vm => vm.Task.Assignee);
-
             fluent.SetBinding(userSelection.Properties, usp => usp.DataSource, vm => vm.Users);
 
+            fluent.SetTrigger(vm => vm.Task, _ => ValidateForm());
             fluent.SetBinding(this, f => f.IsFormValid, vm => vm.IsFormValid);
         }
 
-        void ValidateForm() {
+        public void ValidateForm() {
             isTitleEditValid = IsTitleValid();
             isStartDateEditValid = IsStartDateValid(out _);
             isEndDateEditValid = IsEndDateValid();
+            UpdateFormValidity();
         }
 
         bool IsTitleValid() {
