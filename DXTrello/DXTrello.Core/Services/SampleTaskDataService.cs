@@ -18,7 +18,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(-14),
                         EndDate = today.AddDays(-12),
                         Status = ProjectTaskStatus.Done,
-                        Progress = 1.0,
                         Assignee = Users[0]
                     },
                     new() {
@@ -28,7 +27,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(-11),
                         EndDate = today.AddDays(-9),
                         Status = ProjectTaskStatus.Done,
-                        Progress = 1.0,
                         Assignee = Users[1],
                         DependencyIds = { 1 }
                     },
@@ -39,7 +37,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(-8),
                         EndDate = today.AddDays(-7),
                         Status = ProjectTaskStatus.Done,
-                        Progress = 1.0,
                         Assignee = Users[2],
                         DependencyIds = { 2 }
                     },
@@ -50,7 +47,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(-6),
                         EndDate = today.AddDays(-5),
                         Status = ProjectTaskStatus.Done,
-                        Progress = 1.0,
                         Assignee = Users[0],
                         DependencyIds = { 3 }
                     },
@@ -61,7 +57,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(-4),
                         EndDate = today.AddDays(3),
                         Status = ProjectTaskStatus.InProgress,
-                        Progress = 0.45,
                         Assignee = Users[1],
                         DependencyIds = { 4 }
                     },
@@ -73,7 +68,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(-3),
                         EndDate = today.AddDays(-1),
                         Status = ProjectTaskStatus.Review,
-                        Progress = 0.85,
                         Assignee = Users[1]
                     },
                     new() {
@@ -83,7 +77,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(-2),
                         EndDate = today.AddDays(5),
                         Status = ProjectTaskStatus.InProgress,
-                        Progress = 0.3,
                         Assignee = Users[2]
                     },
                     new() {
@@ -94,7 +87,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(-1),
                         EndDate = today.AddDays(1),
                         Status = ProjectTaskStatus.InProgress,
-                        Progress = 0.6,
                         Assignee = Users[2]
                     },
                     new() {
@@ -104,7 +96,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(4),
                         EndDate = today.AddDays(8),
                         Status = ProjectTaskStatus.ToDo,
-                        Progress = 0,
                         Assignee = Users[0],
                         DependencyIds = { 5, 7 }
                     },
@@ -115,7 +106,6 @@ namespace DXTrello.Core.Services {
                         StartDate = today.AddDays(9),
                         EndDate = today.AddDays(14),
                         Status = ProjectTaskStatus.ToDo,
-                        Progress = 0,
                         Assignee = Users[1],
                         DependencyIds = { 9 }
                     }
