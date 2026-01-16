@@ -7,9 +7,9 @@ using DXTrello.Core.Enums;
 namespace DXTrello.Core.Models {
     public class ProjectTask : INotifyPropertyChanged {
         public event PropertyChangedEventHandler? PropertyChanged;
-        void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        void OnPropertyChanged([CallerMemberName] string? propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null) {
+        bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null) {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
             field = value;
             OnPropertyChanged(propertyName);
@@ -44,20 +44,6 @@ namespace DXTrello.Core.Models {
         private DateTime endDate;
         public DateTime EndDate { get => endDate; set => SetField(ref endDate, value); }
 
-        private double progress;
-        public double Progress { 
-            get => progress; 
-            set {
-                if (SetField(ref progress, value))
-                    OnPropertyChanged(nameof(ProgressPercent));
-            }
-        }
-
-        public int ProgressPercent {
-            get => (int)(Progress * 100);
-            set => Progress = value / 100.0;
-        }
-
         private ProjectTaskStatus status;
         public ProjectTaskStatus Status { 
             get => status; 
@@ -71,8 +57,10 @@ namespace DXTrello.Core.Models {
         public TeamMember? Assignee { 
             get => assignee; 
             set {
-                if (SetField(ref assignee, value))
+                if (SetField(ref assignee, value)) {
                     OnPropertyChanged(nameof(AssigneeName));
+                    OnPropertyChanged(nameof(AssigneeAvatar));
+                }
             }
         }
 
@@ -81,5 +69,6 @@ namespace DXTrello.Core.Models {
 
         public string StatusDisplay => Status.ToString();
         public string AssigneeName => Assignee?.DisplayName ?? Assignee?.Login ?? string.Empty;
+        public string AssigneeAvatar => Assignee?.AvatarUrl ?? string.Empty;
     }
 }

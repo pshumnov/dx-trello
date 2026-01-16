@@ -6,6 +6,10 @@ using DevExpress.XtraTreeList.Columns;
 using DevExpress.XtraBars;
 using DXTrello.ViewModel.Services;
 using DevExpress.LookAndFeel;
+using DevExpress.Utils;
+using DevExpress.Utils.Extensions;
+using DevExpress.Utils.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace DXTrello.WinForms {
     public partial class GanttView : DevExpress.XtraEditors.XtraUserControl, IGanttViewService {
@@ -19,20 +23,22 @@ namespace DXTrello.WinForms {
         }
 
         void InitializeGantt() {
+            ganttControl.OptionsBehavior.ScheduleMode = DevExpress.XtraGantt.Options.ScheduleMode.Manual;
+
             // Map the data source fields to the Gantt Control
             ganttControl.TreeListMappings.KeyFieldName = nameof(ProjectTask.Id);
             ganttControl.TreeListMappings.ParentFieldName = nameof(ProjectTask.ParentId);
 
             ganttControl.ChartMappings.StartDateFieldName = nameof(ProjectTask.StartDate);
             ganttControl.ChartMappings.FinishDateFieldName = nameof(ProjectTask.EndDate);
-            ganttControl.ChartMappings.ProgressFieldName = nameof(ProjectTask.ProgressPercent);
             ganttControl.ChartMappings.TextFieldName = nameof(ProjectTask.Title);
 
             // Configure columns
             AddColumn(nameof(ProjectTask.Title), "Task Name", 250, false);
 
             // Allow user interaction
-            ganttControl.OptionsCustomization.AllowModifyTasks = DevExpress.Utils.DefaultBoolean.True;
+            ganttControl.OptionsCustomization.AllowModifyTasks = DefaultBoolean.True;
+            ganttControl.OptionsCustomization.AllowModifyProgress = DefaultBoolean.False;
             ganttControl.OptionsBehavior.Editable = true;
             //
             ganttControl.ZoomMode = GanttZoomMode.Smooth;
@@ -40,13 +46,21 @@ namespace DXTrello.WinForms {
             ganttControl.ChartFinishDate = null;
 
             ganttControl.CustomDrawTask += (s, e) => {
-                if(e.Info is DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo) {
-                    DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo summaryTaskInfo = (DevExpress.XtraGantt.Chart.GanttChartSummaryTaskInfo)e.Info;
-                    if(summaryTaskInfo.Type == DevExpress.XtraGantt.Chart.GanttChartItemType.SummaryTask) {
-                        e.Cache.FillRectangle(DXSkinColors.FillColors.Primary, e.Info.VisibleShapeBounds);
-                        e.Handled = true;
-                    }
-                }
+                const int cornerR = 4, taskHeight = 35;
+                var color = DXSkinColors.FillColors.Primary;
+                //if(e.Info.Type == DevExpress.XtraGantt.Chart.GanttChartItemType.SummaryTask)
+                //    color = DXSkinColors.FillColors.Question;
+                var rect = e.Info.VisibleShapeBounds.ToRectangle();
+                rect.Inflate(0, Math.Max(0, taskHeight - rect.Height) / 2);
+                var cornerRadius = new CornerRadius(cornerR);
+
+                e.Cache.FillRoundedRectangle(color, rect, cornerRadius);
+                DrawWithSmoothing(e.Cache, () => {
+                    e.Cache.DrawRoundedRectangle(color, 1, rect, cornerRadius);
+                });
+                
+                e.DrawRightText();
+                e.Handled = true;
             };
             ganttControl.CustomDrawTimescaleColumn += (s, e) => {
                 const float lineWidth = 1f, pointRadius = 4f, textInflate = 4f;
@@ -61,17 +75,26 @@ namespace DXTrello.WinForms {
                     var textRect = e.Column.TextBounds;
                     textRect.Inflate(textInflate, textInflate);
 
-                    var previousSmoothingMode = e.Cache.SmoothingMode;
-                    e.Cache.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    DrawWithSmoothing(e.Cache, () => {
+                        e.Cache.FillRectangle(DXSkinColors.FillColors.Danger, lineRect);
+                        e.Cache.FillEllipse(DXSkinColors.FillColors.Danger, pointRect);
+                        e.Cache.DrawRectangle(textRect.X, textRect.Y, textRect.Width, textRect.Height, DXSkinColors.FillColors.Danger, textRectThickness);
 
-                    e.Cache.FillRectangle(DXSkinColors.FillColors.Danger, lineRect);
-                    e.Cache.FillEllipse(DXSkinColors.FillColors.Danger, pointRect);
-                    e.Cache.DrawRectangle(textRect.X, textRect.Y, textRect.Width, textRect.Height, DXSkinColors.FillColors.Danger, textRectThickness);
+                    });
 
-                    e.Cache.SmoothingMode = previousSmoothingMode;
                     e.Handled = true;
                 }
             };
+        }
+        void DrawWithSmoothing(GraphicsCache cache, Action draw, SmoothingMode mode = SmoothingMode.AntiAlias) {
+            var previousSmoothingMode = cache.SmoothingMode;
+            cache.SmoothingMode = mode;
+            try {
+                draw();
+            }
+            finally {
+                cache.SmoothingMode = previousSmoothingMode;
+            }
         }
 
         void AddColumn(string fieldName, string caption, int width, bool editable = true) {

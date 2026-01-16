@@ -6,18 +6,22 @@ using DevExpress.Mvvm;
 using DXTrello.ViewModel.Messages;
 using DXTrello.Core.Enums;
 using DXTrello.ViewModel.Services;
+using DXTrello.Core.Services;
 
 namespace DXTrello.ViewModel.ViewModels {
     [POCOViewModel()]
     public class CardViewModel {
-        protected CardViewModel(BindingList<ProjectTask> tasks) {
+        protected CardViewModel(BindingList<ProjectTask> tasks, BindingList<TeamMember> users) {
             Tasks = tasks;
+            Users = users;
             Messenger.Default.Register<SelectedTaskChangedMessage>(this, OnMessageReceived);
         }
-        public static CardViewModel Create(BindingList<ProjectTask> tasks) {
-            return ViewModelSource.Create(() => new CardViewModel(tasks));
+        public static CardViewModel Create(BindingList<ProjectTask> tasks, BindingList<TeamMember> users) {
+            return ViewModelSource.Create(() => new CardViewModel(tasks, users));
         }
+        public virtual ICardViewService CardViewService => this.GetService<ICardViewService>();
         public virtual BindingList<ProjectTask> Tasks { get; protected set; }
+        public virtual BindingList<TeamMember> Users { get; protected set; }
         public virtual ProjectTask? SelectedTask { get; set; }
         public virtual IDialogService DialogService => this.GetService<IDialogService>();
 
@@ -50,6 +54,9 @@ namespace DXTrello.ViewModel.ViewModels {
         }
         public void CloseDetailsPanel() {
             Messenger.Default.Send(new ToggleDetailsWindowMessage(false));
+        }
+        public async Task OnViewLoad() {
+            CardViewService.LoadAvatars(Users);
         }
         void CreateAndFocusNewTask(ProjectTaskStatus targetStatus, bool prepend) {
             ProjectTask newTask = new ProjectTask() {
