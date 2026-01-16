@@ -35,8 +35,14 @@ namespace DXTrello.ViewModel.ViewModels {
         public void ToggleTaskTable() {
             TaskTableVisibility = !TaskTableVisibility;
         }
-        public void ClearSelection() {
-            SelectedTask = null;
+        public void OpenDetailsPanel() {
+            if(SelectedTask == null) {
+                SelectedTask = GanttViewService.GetFocusedNodeTask();
+            }
+            Messenger.Default.Send(new ToggleDetailsWindowMessage(true));
+        }
+        public void CloseDetailsPanel() {
+            Messenger.Default.Send(new ToggleDetailsWindowMessage(false));
         }
         #endregion
 
@@ -46,9 +52,20 @@ namespace DXTrello.ViewModel.ViewModels {
         }
         protected void OnSelectedTaskChanged() {
             Messenger.Default.Send(new SelectedTaskChangedMessage(SelectedTask));
+
         }
         #endregion
-
+        #region Events
+        public void ProcessKey(int key) {
+            if(key == 46 && SelectedTask != null) {
+                Tasks.Remove(SelectedTask);
+                SelectedTask = null;
+            }
+            if(key == 27) {
+                CloseDetailsPanel();
+            }
+        }
+        #endregion
         void OnMessageReceived(SelectedTaskChangedMessage message) {
             if(SelectedTask != message.SelectedTask)
                 SelectedTask = message.SelectedTask;

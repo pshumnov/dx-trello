@@ -29,7 +29,7 @@ namespace DXTrello.WinForms {
             ganttControl.ChartMappings.TextFieldName = nameof(ProjectTask.Title);
 
             // Configure columns
-            AddColumn(nameof(ProjectTask.Title), "Task Name", 250);
+            AddColumn(nameof(ProjectTask.Title), "Task Name", 250, false);
 
             // Allow user interaction
             ganttControl.OptionsCustomization.AllowModifyTasks = DevExpress.Utils.DefaultBoolean.True;
@@ -74,12 +74,13 @@ namespace DXTrello.WinForms {
             };
         }
 
-        void AddColumn(string fieldName, string caption, int width) {
+        void AddColumn(string fieldName, string caption, int width, bool editable = true) {
             TreeListColumn column = ganttControl.Columns.Add();
             column.FieldName = fieldName;
             column.Caption = caption;
             column.Width = width;
             column.Visible = true;
+            column.OptionsColumn.AllowEdit = editable;
         }
 
         void InitializeBindings() {
@@ -90,7 +91,7 @@ namespace DXTrello.WinForms {
             fluent.WithEvent<FocusedNodeChangedEventArgs>(ganttControl, "FocusedNodeChanged")
                 .SetBinding(vm => vm.SelectedTask, args => ganttControl.GetDataRecordByNode(args.Node) as ProjectTask);
             fluent.WithEvent<MouseEventArgs>(ganttControl, "MouseDown")
-                .EventToCommand(vm => vm.ClearSelection(), ShouldClickClearSelection);
+                .EventToCommand(vm => vm.CloseDetailsPanel, ShouldClickClosePanel);
 
             // Sync Selection ViewModel -> View 
             fluent.SetTrigger(x => x.SelectedTask, (task) => {
@@ -116,15 +117,34 @@ namespace DXTrello.WinForms {
             fluent.WithEvent<ListItemClickEventArgs>(timescaleItem, "ListItemClick")
                 .SetBinding(vm => vm.Timescale, args => Enum.Parse<TimescaleEnum>(timescaleItem.Strings[args.Index]));
             fluent.SetBinding(timescaleItem, item => item.Caption, vm => vm.Timescale);
+
+            // Events
+            fluent.WithEvent<KeyEventArgs>(ganttControl, "KeyUp")
+                .EventToCommand(
+                    x => x.ProcessKey,
+                    p => p.KeyValue
+                );
+            fluent.WithEvent<MouseEventArgs>(ganttControl, "MouseDoubleClick")
+                .EventToCommand(
+                    x => x.OpenDetailsPanel,
+                    ShouldDoubleClickOpenPanel
+                );
         }
 
-        bool ShouldClickClearSelection(MouseEventArgs args) {
+        bool ShouldClickClosePanel(MouseEventArgs args) {
             var hitInfo = ganttControl.CalcHitInfo(args.Location);
             if(hitInfo.InChart && hitInfo.ChartHitTest.RowInfo != null)
                 return false;
             if(hitInfo.InTreeList && hitInfo.TreeListHitTest.InRow)
                 return false;
             return true;
+        }
+
+        bool ShouldDoubleClickOpenPanel(MouseEventArgs args) {
+            var hitInfo = ganttControl.CalcHitInfo(args.Location);
+            if(hitInfo.InTreeList && hitInfo.TreeListHitTest.InRow)
+                return true;
+            return false;
         }
 
         void RegisterServices() {
@@ -164,6 +184,9 @@ namespace DXTrello.WinForms {
             }
             ganttControl.SetChartVisibleRange(startDate, finishDate);
             ganttControl.SetTimelineVisibleRange(startDate, finishDate);
+        }
+        ProjectTask? IGanttViewService.GetFocusedNodeTask() {
+            return ganttControl.GetDataRecordByNode(ganttControl.FocusedNode) as ProjectTask;
         }
     }
 }

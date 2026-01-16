@@ -41,6 +41,9 @@ namespace DXTrello.ViewModel.ViewModels {
                 Tasks.Remove(SelectedTask);
                 SelectedTask = null;
             }
+            if(key == 27) {
+                CloseDetailsPanel();
+            }
         }
         public void OpenDetailsPanel() {
             Messenger.Default.Send(new ToggleDetailsWindowMessage(true));
