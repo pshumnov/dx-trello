@@ -14,13 +14,7 @@ namespace DXTrello.WinForms {
                 RegisterServices();
             }
 
-            dockManager1.RegisterDockPanel += RegisterDockPanel;
-        }
-        void RegisterDockPanel(object sender, DockPanelEventArgs e) {
-            e.Panel.DockTo(DockingStyle.Right);
-            e.Panel.Options.ShowAutoHideButton = false;
-            e.Panel.Options.ShowCloseButton = false;
-            e.Panel.Width = 450;
+            detailsPanel.Width = 500;
         }
         void InitializeBindings() {
             var fluent = mvvmContext.OfType<MainViewModel>();
@@ -30,18 +24,13 @@ namespace DXTrello.WinForms {
         }
         void RegisterServices() {
             mvvmContext.RegisterService("TabbedView", DocumentManagerService.Create(tabbedView1));
-            mvvmContext.RegisterService("DockManager", DocumentManagerService.Create(dockManager1));
             mvvmContext.RegisterService(this);
         }
         public void ShowDetails(bool show) {
-            var targetPanel = dockManager1.Panels[0];
-            if(show == targetPanel.Visible)
-                return;
-            if(show) {
-                targetPanel.Show();
-            }
+            if(show)
+                detailsPanel.ShowPopup();
             else
-                targetPanel.Hide();
+                detailsPanel.HidePopup();
         }
     }
 }

@@ -210,6 +210,10 @@ namespace DXTrello.WinForms {
                     x => x.ProcessKey,
                     p => p.KeyValue
                 );
+            fluent.WithEvent<MouseEventArgs>(tileView, "ItemDoubleClick")
+                .EventToCommand(
+                    x => x.OpenDetailsPanel
+                );
 
             mvvmContext.RegisterService(this);
         }

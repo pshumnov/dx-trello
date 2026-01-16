@@ -29,12 +29,17 @@
             accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
             tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
-            dockManager1 = new DevExpress.XtraBars.Docking.DockManager(components);
+            detailsPanel = new DevExpress.Utils.FlyoutPanel();
+            flyoutPanelControl1 = new DevExpress.Utils.FlyoutPanelControl();
+            detailsView1 = new DetailsView();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             ((System.ComponentModel.ISupportInitialize)accordionControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dockManager1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)detailsPanel).BeginInit();
+            detailsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)flyoutPanelControl1).BeginInit();
+            flyoutPanelControl1.SuspendLayout();
             SuspendLayout();
             // 
             // mvvmContext
@@ -68,17 +73,41 @@
             // 
             tabbedView1.Style = DevExpress.XtraBars.Docking2010.Views.DockingViewStyle.Classic;
             // 
-            // dockManager1
+            // detailsPanel
             // 
-            dockManager1.Form = this;
-            dockManager1.Style = DevExpress.XtraBars.Docking2010.Views.DockingViewStyle.Light;
-            dockManager1.TopZIndexControls.AddRange(new string[] { "DevExpress.XtraBars.BarDockControl", "DevExpress.XtraBars.StandaloneBarDockControl", "System.Windows.Forms.MenuStrip", "System.Windows.Forms.StatusStrip", "System.Windows.Forms.StatusBar", "DevExpress.XtraBars.Ribbon.RibbonStatusBar", "DevExpress.XtraBars.Ribbon.RibbonControl", "DevExpress.XtraBars.Navigation.OfficeNavigationBar", "DevExpress.XtraBars.Navigation.TileNavPane", "DevExpress.XtraBars.TabFormControl", "DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl", "DevExpress.XtraBars.ToolbarForm.ToolbarFormControl" });
+            detailsPanel.Controls.Add(flyoutPanelControl1);
+            detailsPanel.Location = new Point(588, 140);
+            detailsPanel.Name = "detailsPanel";
+            detailsPanel.Options.AnchorType = DevExpress.Utils.Win.PopupToolWindowAnchor.Right;
+            detailsPanel.OwnerControl = this;
+            detailsPanel.Size = new Size(382, 188);
+            detailsPanel.TabIndex = 1;
+            // 
+            // flyoutPanelControl1
+            // 
+            flyoutPanelControl1.AutoSize = true;
+            flyoutPanelControl1.Controls.Add(detailsView1);
+            flyoutPanelControl1.Dock = DockStyle.Fill;
+            flyoutPanelControl1.FlyoutPanel = detailsPanel;
+            flyoutPanelControl1.Location = new Point(0, 0);
+            flyoutPanelControl1.Name = "flyoutPanelControl1";
+            flyoutPanelControl1.Size = new Size(382, 188);
+            flyoutPanelControl1.TabIndex = 0;
+            // 
+            // detailsView1
+            // 
+            detailsView1.Dock = DockStyle.Fill;
+            detailsView1.Location = new Point(2, 2);
+            detailsView1.Name = "detailsView1";
+            detailsView1.Size = new Size(378, 184);
+            detailsView1.TabIndex = 0;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1014, 611);
+            Controls.Add(detailsPanel);
             Controls.Add(accordionControl1);
             Margin = new Padding(2, 3, 2, 3);
             Name = "MainForm";
@@ -87,7 +116,11 @@
             ((System.ComponentModel.ISupportInitialize)accordionControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).EndInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dockManager1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)detailsPanel).EndInit();
+            detailsPanel.ResumeLayout(false);
+            detailsPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)flyoutPanelControl1).EndInit();
+            flyoutPanelControl1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -98,6 +131,8 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement1;
         private DevExpress.XtraBars.Docking2010.DocumentManager documentManager1;
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tabbedView1;
-        private DevExpress.XtraBars.Docking.DockManager dockManager1;
+        private DevExpress.Utils.FlyoutPanel detailsPanel;
+        private DevExpress.Utils.FlyoutPanelControl flyoutPanelControl1;
+        private DetailsView detailsView1;
     }
 }

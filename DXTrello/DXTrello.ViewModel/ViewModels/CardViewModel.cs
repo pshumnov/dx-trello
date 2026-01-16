@@ -23,6 +23,8 @@ namespace DXTrello.ViewModel.ViewModels {
 
         protected void OnSelectedTaskChanged() {
             Messenger.Default.Send(new SelectedTaskChangedMessage(SelectedTask));
+            if(SelectedTask == null)
+                CloseDetailsPanel();
         }
         void OnMessageReceived(SelectedTaskChangedMessage message) {
             if(SelectedTask != message.SelectedTask)
@@ -39,6 +41,12 @@ namespace DXTrello.ViewModel.ViewModels {
                 Tasks.Remove(SelectedTask);
                 SelectedTask = null;
             }
+        }
+        public void OpenDetailsPanel() {
+            Messenger.Default.Send(new ToggleDetailsWindowMessage(true));
+        }
+        public void CloseDetailsPanel() {
+            Messenger.Default.Send(new ToggleDetailsWindowMessage(false));
         }
         void CreateAndFocusNewTask(ProjectTaskStatus targetStatus, bool prepend) {
             ProjectTask newTask = new ProjectTask() {

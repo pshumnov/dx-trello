@@ -20,7 +20,7 @@ namespace DXTrello.ViewModel.ViewModels {
             Title = "DXTrello";
             Tasks = [];
             SelectedViewIndex = 0;
-            Messenger.Default.Register<SelectedTaskChangedMessage>(this, OnMessageReceived);
+            Messenger.Default.Register<ToggleDetailsWindowMessage>(this, OnToggleMessageReceived);
 
             CardViewModel = CardViewModel.Create(Tasks).SetParentViewModel(this);
             GanttViewModel = GanttViewModel.Create(Tasks).SetParentViewModel(this);
@@ -52,18 +52,9 @@ namespace DXTrello.ViewModel.ViewModels {
             var ganttDocument = tdms.CreateDocument(GanttViewModel);
             ganttDocument.Title = "Gantt";
             ganttDocument.Show();
-
-            var ddms = this.GetService<IDocumentManagerService>("DockManager");
-            var detailsDocument = ddms.CreateDocument(DetailsViewModel);
-            detailsDocument.Title = "Details";
-            detailsDocument.Show();
         }
-        void OnMessageReceived(SelectedTaskChangedMessage message) {
-            if(message.SelectedTask != null) {
-                ToggleDetailsService?.ShowDetails(true);
-            } else {
-                ToggleDetailsService?.ShowDetails(false);
-            }
+        void OnToggleMessageReceived(ToggleDetailsWindowMessage message) {
+                ToggleDetailsService?.ShowDetails(message.Show);
         }
     }
 }
