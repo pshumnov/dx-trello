@@ -6,24 +6,27 @@ using DevExpress.Mvvm;
 using DXTrello.ViewModel.Messages;
 using DXTrello.Core.Enums;
 using DXTrello.ViewModel.Services;
-using DXTrello.Core.Services;
 
 namespace DXTrello.ViewModel.ViewModels {
     [POCOViewModel()]
     public class CardViewModel {
-        protected CardViewModel(BindingList<ProjectTask> tasks, BindingList<TeamMember> users) {
+        protected CardViewModel(BindingList<ProjectTask> tasks) {
             Tasks = tasks;
-            Users = users;
+            Users = [];
             Messenger.Default.Register<SelectedTaskChangedMessage>(this, OnMessageReceived);
         }
-        public static CardViewModel Create(BindingList<ProjectTask> tasks, BindingList<TeamMember> users) {
-            return ViewModelSource.Create(() => new CardViewModel(tasks, users));
+        public static CardViewModel Create(BindingList<ProjectTask> tasks) {
+            return ViewModelSource.Create(() => new CardViewModel(tasks));
         }
         public virtual ICardViewService CardViewService => this.GetService<ICardViewService>();
         public virtual BindingList<ProjectTask> Tasks { get; protected set; }
-        public virtual BindingList<TeamMember> Users { get; protected set; }
+        public virtual IList<TeamMember> Users { get; protected set; }
         public virtual ProjectTask? SelectedTask { get; set; }
         public virtual IDialogService DialogService => this.GetService<IDialogService>();
+
+        public void SetUsers(IEnumerable<TeamMember>? users) {
+            Users = users?.ToList() ?? new List<TeamMember>();
+        }
 
         protected void OnSelectedTaskChanged() {
             Messenger.Default.Send(new SelectedTaskChangedMessage(SelectedTask));
@@ -57,6 +60,7 @@ namespace DXTrello.ViewModel.ViewModels {
         }
         public async Task OnViewLoad() {
             CardViewService.LoadAvatars(Users);
+            CardViewService.MergeBar();
         }
         void CreateAndFocusNewTask(ProjectTaskStatus targetStatus, bool prepend) {
             ProjectTask newTask = new ProjectTask() {

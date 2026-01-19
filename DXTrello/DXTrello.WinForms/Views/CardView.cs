@@ -236,5 +236,11 @@ namespace DXTrello.WinForms {
             }
             tileView.HtmlImages = collection;
         }
+        public async void MergeBar() {
+            var parentForm = FindForm() as MainForm;
+            if(parentForm is IBarProvider barProvider) {
+                bar2.Merge(barProvider.MainMenu);
+            }
+        }
     }
 }

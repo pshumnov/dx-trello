@@ -59,6 +59,8 @@
             // 
             // barManager1
             // 
+            barManager1.AllowCustomization = false;
+            barManager1.AllowShowToolbarsPopup = false;
             barManager1.Bars.AddRange(new DevExpress.XtraBars.Bar[] { bar1 });
             barManager1.DockControls.Add(barDockControlTop);
             barManager1.DockControls.Add(barDockControlBottom);
@@ -82,14 +84,14 @@
             // 
             toggleTreeItem.Caption = "Task Table";
             toggleTreeItem.Id = 0;
-            toggleTreeItem.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("taskPanelItem.ImageOptions.SvgImage");
+            toggleTreeItem.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("toggleTreeItem.ImageOptions.SvgImage");
             toggleTreeItem.Name = "toggleTreeItem";
             // 
             // toggleTimelineItem
             // 
             toggleTimelineItem.Caption = "Timeline";
             toggleTimelineItem.Id = 6;
-            toggleTimelineItem.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("timelineItem.ImageOptions.SvgImage");
+            toggleTimelineItem.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("toggleTimelineItem.ImageOptions.SvgImage");
             toggleTimelineItem.Name = "toggleTimelineItem";
             // 
             // todayItem
@@ -98,11 +100,11 @@
             todayItem.Id = 1;
             todayItem.Name = "todayItem";
             // 
-            // timePeriodItem
+            // timescaleItem
             // 
             timescaleItem.Caption = "Day";
             timescaleItem.Id = 5;
-            timescaleItem.Name = "timePeriodItem";
+            timescaleItem.Name = "timescaleItem";
             timescaleItem.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.Caption;
             timescaleItem.Strings.AddRange(new object[] { "Day", "Week", "Month", "Quarter" });
             // 
