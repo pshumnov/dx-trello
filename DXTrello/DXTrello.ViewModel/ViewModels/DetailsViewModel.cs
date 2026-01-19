@@ -45,7 +45,6 @@ namespace DXTrello.ViewModel.ViewModels {
                 SourceTask.Description = Task.Description;
                 SourceTask.StartDate = Task.StartDate;
                 SourceTask.EndDate = Task.EndDate;
-                SourceTask.Status = Task.Status;
                 SourceTask.Assignee = Task.Assignee;
             }
         }
