@@ -65,6 +65,9 @@ namespace DXTrello.ViewModel.ViewModels {
                 CloseDetailsPanel();
             }
         }
+        public async Task OnViewLoad() {
+            GanttViewService.MergeBar();
+        }
         #endregion
         void OnMessageReceived(SelectedTaskChangedMessage message) {
             if(SelectedTask != message.SelectedTask)

@@ -152,6 +152,8 @@ namespace DXTrello.WinForms {
                     x => x.OpenDetailsPanel,
                     ShouldDoubleClickOpenPanel
                 );
+            fluent.WithEvent(this, "Load")
+                .EventToCommand(x => x.OnViewLoad);
         }
 
         bool ShouldClickClosePanel(MouseEventArgs args) {
@@ -210,6 +212,12 @@ namespace DXTrello.WinForms {
         }
         ProjectTask? IGanttViewService.GetFocusedNodeTask() {
             return ganttControl.GetDataRecordByNode(ganttControl.FocusedNode) as ProjectTask;
+        }
+        public async void MergeBar() {
+            var parentForm = FindForm() as MainForm;
+            if(parentForm is IBarProvider barProvider) {
+                bar1.Merge(barProvider.MainMenu);
+            }
         }
     }
 }
