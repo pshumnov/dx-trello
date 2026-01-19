@@ -25,8 +25,6 @@
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
-            accordionControl1 = new DevExpress.XtraBars.Navigation.AccordionControl();
-            accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
             barManager1 = new DevExpress.XtraBars.BarManager(components);
             bar2 = new DevExpress.XtraBars.Bar();
@@ -40,7 +38,6 @@
             flyoutPanelControl1 = new DevExpress.Utils.FlyoutPanelControl();
             detailsView1 = new DetailsView();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)accordionControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).BeginInit();
@@ -54,22 +51,6 @@
             // 
             mvvmContext.ContainerControl = this;
             mvvmContext.ViewModelType = typeof(ViewModel.ViewModels.MainViewModel);
-            // 
-            // accordionControl1
-            // 
-            accordionControl1.Dock = DockStyle.Left;
-            accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement1 });
-            accordionControl1.Location = new Point(0, 34);
-            accordionControl1.Margin = new Padding(3, 4, 3, 4);
-            accordionControl1.Name = "accordionControl1";
-            accordionControl1.OptionsMinimizing.State = DevExpress.XtraBars.Navigation.AccordionControlState.Minimized;
-            accordionControl1.Size = new Size(48, 692);
-            accordionControl1.TabIndex = 0;
-            // 
-            // accordionControlElement1
-            // 
-            accordionControlElement1.Name = "accordionControlElement1";
-            accordionControlElement1.Text = "Element1";
             // 
             // documentManager1
             // 
@@ -186,7 +167,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1304, 726);
             Controls.Add(detailsPanel);
-            Controls.Add(accordionControl1);
             Controls.Add(barDockControlLeft);
             Controls.Add(barDockControlRight);
             Controls.Add(barDockControlBottom);
@@ -195,7 +175,6 @@
             Name = "MainForm";
             Text = "MainView";
             ((System.ComponentModel.ISupportInitialize)mvvmContext).EndInit();
-            ((System.ComponentModel.ISupportInitialize)accordionControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).EndInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).EndInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).EndInit();
@@ -211,8 +190,6 @@
         #endregion
 
         private DevExpress.Utils.MVVM.MVVMContext mvvmContext;
-        private DevExpress.XtraBars.Navigation.AccordionControl accordionControl1;
-        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement1;
         private DevExpress.XtraBars.Docking2010.DocumentManager documentManager1;
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tabbedView1;
         private DevExpress.Utils.FlyoutPanel detailsPanel;
